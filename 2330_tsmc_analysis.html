@@ -167,7 +167,7 @@ ul{padding-left:20px} li{margin:5px 0}
     <a class="pad" href="#step2">2 · 基本資訊</a>
     <a class="pad" href="#step3">3 · 法說會</a>
     <a class="pad" href="#step4">4 · 營收趨勢</a>
-    <a class="pad locked" href="#step5">5 · 前瞻估值</a>
+    <a class="pad" href="#step5">5 · 前瞻估值</a>
     <a class="pad locked" href="#step6">6 · 投資決策</a>
   </nav>
 
@@ -451,7 +451,7 @@ ul{padding-left:20px} li{margin:5px 0}
       · <b>【資料不足，無法確認】</b>：「近四季 EPS 87.39」為鉅亨口徑（月均價／近四季），本報告未逐季拆解覆核，精確數字仍以公司季報為準。
     </div>
 
-    <p class="foot">報告版本 v1.3　·　更新時間 2026-08-02 05:39　·　第 1–2 步完成（第 3–6 步待進行）</p>
+    <p class="foot">報告版本 v1.4　·　更新時間 2026-08-02 05:44　·　第 1–2 步完成（第 3–6 步待進行）</p>
   </section>
 
 
@@ -667,6 +667,79 @@ ul{padding-left:20px} li{margin:5px 0}
     </div>
 
     <p class="foot">第 1–4 步完成 · 現金流 92 分 → 基本面 → 法說會 → 營收趨勢 → 續看第 5 步前瞻估值</p>
+  </section>
+
+
+  <section id="step5">
+    <p class="step-tag">【第 5 步／共 6 步】</p>
+    <h2>前瞻本益比 / EPS 預估 · 估值收尾</h2>
+    <p class="lead">以現價 2,425 元（07/31 收盤快照）為基準。以下法人預估為 2026 Q2 法說會後（7 月）版本，多家並陳、呈現區間而非單一數字。</p>
+
+    <div class="callout">
+      <p class="kh">本步驟重點</p>
+      <p>· 法人 <b>2026E EPS 共識約 95–107 元（「破百」）</b>、2027E 約 125–153 元、2028E 約 165–198 元——但<b>離散度很大</b>，信心不宜太高。</p>
+      <p>· 前瞻本益比：現價對 <b>2026E 約 22.7–25.5 倍</b>、對 <b>2027E 約 15.8–19.4 倍</b>，都<span class="posv">低於目前近四季 27.75 倍</span>——EPS 高速成長讓「往前看」的倍數變便宜。</p>
+      <p>· 法人目標價 <b>2,600（元大）～3,800 元（花旗）</b>，現價 2,425 甚至低於本土最保守目標——但這高度依賴 AI 需求不中斷。</p>
+    </div>
+
+    <h3>一、法人 EPS 預估（多家並陳，7 月法說後）</h3>
+    <div class="tablewrap">
+      <table class="grid">
+        <tr><th>年度</th><th>EPS 區間（元）</th><th>代表法人</th></tr>
+        <tr><td>2025（實際）</td><td class="mono">66.26</td><td>已公告</td></tr>
+        <tr><td>2026E（當年）</td><td class="mono hi">95 – 107</td><td>高盛95.2、元大~100、美銀107、花旗106.15</td></tr>
+        <tr><td>2027E（次一年）</td><td class="mono hi">125 – 153</td><td>高盛125、元大128.46、瑞銀139.27、花旗148.69、美銀153</td></tr>
+        <tr><td>2028E（次二年）</td><td class="mono">165 – 198</td><td>高盛165、美銀178、瑞銀182.04、花旗198.42</td></tr>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--ink2)">2026 上半年已實際賺 EPS 49.32 元，全年估 ~100 元意味下半年約再賺 ~50 元（2 奈米稀釋毛利率、但營收持續成長，大致打平）——這是全年估值的合理性檢查。</p>
+
+    <h3>二、前瞻本益比法 —— 回答「現在貴不貴」</h3>
+    <p class="lead">公式：<b>現價 ÷ 預估 EPS</b>（已知股價，求隱含倍數）。現價 2,425 元。</p>
+    <div class="tablewrap">
+      <table class="grid r5">
+        <tr><th>基準</th><th>預估 EPS</th><th>前瞻本益比</th><th>對照</th></tr>
+        <tr><td>對 2026E</td><td class="mono">95 – 107</td><td class="mono hi">約 22.7 – 25.5 倍</td><td>低於近四季 27.75 倍</td></tr>
+        <tr><td>對 2027E</td><td class="mono">125 – 153</td><td class="mono hi">約 15.8 – 19.4 倍</td><td>明顯偏低</td></tr>
+      </table>
+    </div>
+    <p>解讀：因為 EPS 還在高速成長，「往前看」的本益比比「往後看」（近四季 27.75 倍）更低。
+    對 2027 年獲利只給約 16–19 倍，以台積電歷史區間（約 15–30 倍）來看，落在<b>中間偏下</b>——單就成長性而言不算貴，前提是那些 EPS 預估要兌現。</p>
+
+    <h3>三、目標本益比法 —— 回答「合理價可能落在哪」</h3>
+    <p class="lead">公式：<b>預估 EPS × 假設合理倍數</b>（已知倍數，反推目標價）。<span class="negv">這與上面的前瞻本益比法是同一公式的不同用法，不是同一件事。</span>目標本益比法的結果<b>對「倍數怎麼選」高度敏感、沒有標準答案</b>，只是敏感度試算，不是預測。</p>
+    <div class="tablewrap">
+      <table class="grid r5">
+        <tr><th>倍數情境</th><th>× 2026E（~100）</th><th>× 2027E（~140）</th></tr>
+        <tr><td>20 倍</td><td class="mono">~2,000</td><td class="mono">~2,800</td></tr>
+        <tr><td>25 倍</td><td class="mono hi">~2,500</td><td class="mono hi">~3,500</td></tr>
+        <tr><td>30 倍</td><td class="mono">~3,000</td><td class="mono">~4,200</td></tr>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--ink2)">實例：亞系外資的 2,400 元目標價，就是用「2027E EPS × 20–25 倍」推出來的。可見<b>光是倍數從 20 換到 30，目標價就從 2,000 跳到 3,000（差 50%）</b>——所以目標本益比法只能當參考帶，不能當精準預測。</p>
+
+    <div class="callout" style="border-left-color:var(--neg)">
+      <p class="kh">預估不確定性 · 務必先讀</p>
+      <p>· <b>離散度極大</b>：2027E EPS 從 125 到 153（差約 22%）、目標價從 2,600 到 3,800（差約 46%）——法人之間根本沒有真正共識，代表<span class="negv">這些數字的信心水準有限</span>。</p>
+      <p>· <b>幾乎全靠 AI 撐</b>：這些上修都建立在「AI 需求到 2027–2030 不中斷 ＋ 2027 年先進製程漲價 5–10% ＋ 2 奈米順利放量」三個假設上。第一步也看到 2023 年曾出現營業現金流回落一次——台積電<b>並非沒有循環風險</b>。</p>
+      <p>· <b>方向一路上修 ≠ 一定會兌現</b>：2026 上半年法人不斷調高預估，動能偏多；但估值對情緒敏感（7/28 台股才剛出現史上第 3 大跌點、台積電同步重挫），基本面強不代表股價短期不會震盪。</p>
+    </div>
+
+    <div class="note">
+      <b>【資料來源與查核備註】</b>
+      <div class="srcbox">
+        · 花旗 EPS 106.15/148.69/198.42、目標價 3,800；小摩 3,100：聯合新聞網 <a href="https://udn.com/news/story/7253/9623292" target="_blank" rel="noopener">udn.com/news/story/7253/9623292</a><br>
+        · 美銀 EPS 107/153/178、目標價 3,100：Yahoo／FTNN <a href="https://tw.stock.yahoo.com/news/%E6%B3%95%E8%AA%AA%E5%89%8D%E5%A4%96%E8%B3%87%E6%9C%80%E9%AB%98%E5%96%8A3-100%E5%85%83-%E5%8F%B0%E7%A9%8D%E9%9B%BBeps%E9%A0%90%E4%BC%B0%E4%B8%8A%E7%9C%8B178%E5%85%83-ai-2%E5%A5%88%E7%B1%B3-003600344.html" target="_blank" rel="noopener">tw.stock.yahoo.com/…EPS上看178元</a><br>
+        · 瑞銀 EPS 99.84/139.27/182.04、目標價 3,400：經濟日報 <a href="https://money.udn.com/money/story/5607/9596199" target="_blank" rel="noopener">money.udn.com/money/story/5607/9596199</a><br>
+        · 元大 2026~100、2027 128.46、目標價 2,600：Yahoo／FTNN <a href="https://tw.stock.yahoo.com/news/%E7%9B%AE%E6%A8%99%E5%83%B9%E7%9B%B4%E4%B8%8A2600%E5%85%83-%E5%8F%B0%E7%A9%8D%E9%9B%BB2026%E5%B9%B4eps%E5%8F%AF%E9%80%BC%E8%BF%91%E7%99%BE%E5%85%83-%E6%B3%95%E4%BA%BA%E6%8F%AD3%E5%B9%B4-%E7%84%A1%E6%95%B5%E5%85%A7%E5%B9%95-104500873.html" target="_blank" rel="noopener">tw.stock.yahoo.com/…2026年EPS逼近百元</a><br>
+        · 「2027E EPS ×20–25 倍」目標價法實例：ETtoday <a href="https://finance.ettoday.net/news/3095500" target="_blank" rel="noopener">finance.ettoday.net/news/3095500</a>
+      </div>
+      <br>· <b>【推算標註】</b>前瞻本益比、目標價情境皆為本報告以「現價 2,425 ÷ 法人 EPS」或「法人 EPS × 假設倍數」推算，非法人原文直接給出的單一數字；倍數 20/25/30 為情境假設，非建議值。<br>
+      · <b>即時報價非區間</b>：2,425 為 07/31 單一收盤快照，正式估值請以你看盤當下股價重算。<br>
+      · 我不是理財顧問，以上為資訊整理與敏感度試算，不構成投資建議。
+    </div>
+
+    <p class="foot">第 1–5 步完成 · 現金流 92 分 → 基本面 → 法說會 → 營收 → 估值。第 6 步（投資決策）僅在你主動詢問時才做。</p>
   </section>
 
 </div>
