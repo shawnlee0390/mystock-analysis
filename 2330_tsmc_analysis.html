@@ -91,6 +91,24 @@ td.pos{color:var(--pos)} td.neg{color:var(--neg)}
 .tag.ok{background:#e4f2ea;color:var(--pos)}
 .tag.bad{background:#f7e3df;color:var(--neg)}
 
+/* key-value 資訊表 */
+.kv{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 6px}
+.kv td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.kv td:first-child{color:var(--ink2);white-space:nowrap;width:42%}
+.kv td:last-child{font-weight:500}
+.kv .hi{color:var(--accent);font-weight:600}
+.kvhead{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;
+  color:var(--ink2);margin:24px 0 2px;text-transform:uppercase}
+a.src{color:var(--accent);text-decoration:none}
+a.src:hover{text-decoration:underline}
+.srcbox{font-size:12px;color:var(--ink2);line-height:1.9;margin-top:10px;
+  font-family:'IBM Plex Mono',monospace;word-break:break-all}
+.srcbox a{color:var(--accent);text-decoration:none}
+.srcbox a:hover{text-decoration:underline}
+.ircard{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;margin:14px 0}
+.ircard .d{font-family:'Fraunces',serif;font-size:20px;font-weight:600}
+
 /* charts */
 .chart{width:100%;height:auto;display:block;margin:6px 0 4px}
 .chart .v{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500}
@@ -142,7 +160,7 @@ ul{padding-left:20px} li{margin:5px 0}
 
   <nav class="stepnav" aria-label="步驟導覽">
     <a class="pad active" href="#step1">1 · 現金流盲測</a>
-    <a class="pad locked" href="#step2">2 · 基本資訊</a>
+    <a class="pad" href="#step2">2 · 基本資訊</a>
     <a class="pad locked" href="#step3">3 · 法說會</a>
     <a class="pad locked" href="#step4">4 · 營收趨勢</a>
     <a class="pad locked" href="#step5">5 · 前瞻估值</a>
@@ -358,7 +376,78 @@ ul{padding-left:20px} li{margin:5px 0}
       · <b>【資料不足，無法確認】</b>之項目：投資活動 B 的固定資產 vs 金融資產拆分、融資活動 C 的借款／公司債／現金增資／配息細項。這兩項細項會影響規則三、四的精算，本報告已誠實標註，未以推測填補。
     </div>
 
-    <p class="foot">報告版本 v1.0　·　生成時間 2026-08-01 08:48　·　第 1 步／共 6 步（第 2–6 步待確認後續進行）</p>
+    <p class="foot">第 1 步完成 · 現金流盲測過關（92.0 分）→ 續看第 2 步基本資訊</p>
+  </section>
+
+  <section id="step2">
+    <p class="step-tag">【第 2 步／共 6 步】</p>
+    <h2>基本資訊查詢 · 現況快照</h2>
+    <p class="lead">現金流盲測過關後才查市場面。以下為 2026/08 上網查得，每筆附實際來源連結；即時報價僅為「最後更新時間」快照，正式交易以你的券商 App 為準。</p>
+
+    <div class="callout">
+      <p class="kh">本步驟重點</p>
+      <p>· 收盤 <b>2,425 元</b>（07/31，當日 <span class="posv">+9.98% 漲停反彈</span>，昨收 2,205）——
+      近期波動極大：7/28 台股重挫、台積電一度殺到 2,280，隨後強彈。本益比約 <b>27.75 倍</b>（近四季 EPS 87.39，涵蓋 25Q3–26Q2）。</p>
+      <p>· <b>26Q2 EPS 27.25 元創單季新高</b>，上半年累計 EPS <b>49.32 元</b>；毛利率 67.7%、營益率 60.3% 雙創新高。</p>
+      <p>· <b>6 月營收 4,426.8 億、年增 67.9% 創單月新高</b>，上半年累計 2.40 兆、年增 35.6%，史上最強上半年。
+      法說會全年美元營收成長目標<b>二度上調至「略高於 40%」</b>。</p>
+    </div>
+
+    <p class="kvhead">股價與估值（來源：鉅亨網 07/31 收盤快照）</p>
+    <table class="kv">
+      <tr><td>收盤價</td><td class="hi">2,425 元　（+220 / +9.98%，昨收 2,205）</td></tr>
+      <tr><td>近期波動（分開列示，非區間）</td><td>7/28 盤中一度殺至約 2,280（台股史上第 3 大跌點日）→ 7/31 漲停反彈至 2,425</td></tr>
+      <tr><td>52 週高 / 低</td><td>2,535 / 1,125</td></tr>
+      <tr><td>市值</td><td>62.89 兆</td></tr>
+      <tr><td>本益比（近四季 EPS 87.39）</td><td class="hi">約 27.75 倍</td></tr>
+      <tr><td>每股淨值 / 股價淨值比</td><td>133.38 元 / 18.18 倍</td></tr>
+      <tr><td>2026 現金股利 / 殖利率</td><td>24 元（年增 33%） / 約 1.0%</td></tr>
+    </table>
+
+    <p class="kvhead">獲利表現（來源：台積電 Q2 法說會報導）</p>
+    <table class="kv">
+      <tr><td>2026 Q2 EPS</td><td class="hi">27.25 元（單季歷史新高）</td></tr>
+      <tr><td>2026 Q1 EPS</td><td>22.08 元</td></tr>
+      <tr><td>2026 上半年累計 EPS</td><td class="hi">49.32 元</td></tr>
+      <tr><td>2025 全年 EPS</td><td>66.26 元　<span style="color:var(--ink2);font-weight:400">（使用者截圖，未經第三方覆核）</span></td></tr>
+      <tr><td>2026 Q2 毛利率 / 營益率</td><td>67.7% / 60.3%（雙創新高）</td></tr>
+      <tr><td>2026 Q2 稅後純益</td><td>約 7,065.6 億元</td></tr>
+    </table>
+
+    <p class="kvhead">近期營收（來源：ETtoday／TechNews／Yahoo）</p>
+    <table class="kv">
+      <tr><td>2026 年 6 月營收</td><td class="hi">4,426.8 億元（月增 6.2%、年增 67.9%，單月新高）</td></tr>
+      <tr><td>2026 上半年累計</td><td class="hi">2 兆 4,044.8 億元（年增 35.6%，史上最強上半年）</td></tr>
+      <tr><td>2026 Q2 合併營收</td><td>約 1.27 兆元（達成前次法說 390–402 億美元財測）</td></tr>
+    </table>
+
+    <p class="kvhead">法人說明會</p>
+    <div class="ircard">
+      <div class="d">2026 Q2 法說會 · 2026/07/16（週四）14:00</div>
+      <p style="margin:8px 0 4px">地點：台北文華東方酒店 B2 文華廳，同步線上電話會議。
+      前次 Q1 法說會為 2026/04/16；Q3、Q4 場次日期官方行事曆尚未公布。</p>
+      <p style="margin:4px 0 0">官方投資人關係網站（簡報 PDF、新聞稿、逐字稿）：
+      <a class="src" href="https://investor.tsmc.com" target="_blank" rel="noopener">investor.tsmc.com</a></p>
+      <p style="margin:8px 0 0;color:var(--ink2);font-size:13px">Q2 法說重點（第 3 步深入）：全年美元營收成長二度上調至「略高於 40%」、
+      資本支出上調至 600–640 億美元、亞利桑那追加 1,000 億美元投資、2 奈米量產爬坡；
+      Q3 展望營收 446–458 億美元（中位 452，季增約 12%、年增約 37%）、毛利率 65–67%。</p>
+    </div>
+
+    <div class="note">
+      <b>【資料來源與查核備註】</b>每筆數字對應實際查詢連結如下：
+      <div class="srcbox">
+        · 股價／本益比／淨值／殖利率：鉅亨網總覽（07/31 收盤）<a href="https://www.cnyes.com/twstock/2330" target="_blank" rel="noopener">https://www.cnyes.com/twstock/2330</a><br>
+        · Q2 EPS／毛利率／Q3 展望／資本支出／亞利桑那：鉅亨〈台積電法說 九大重點〉<a href="https://news.cnyes.com/news/id/6537162" target="_blank" rel="noopener">https://news.cnyes.com/news/id/6537162</a><br>
+        · 6 月營收與上半年累計：ETtoday <a href="https://finance.ettoday.net/news/3200198" target="_blank" rel="noopener">https://finance.ettoday.net/news/3200198</a>　/　TechNews <a href="https://finance.technews.tw/2026/07/13/tsmc-2330-202606-financial-report/" target="_blank" rel="noopener">technews.tw/2026/07/13</a><br>
+        · 2026 現金股利 24 元：TVBS〈台積電法說會懶人包〉<a href="https://news.tvbs.com.tw/money/3259113" target="_blank" rel="noopener">https://news.tvbs.com.tw/money/3259113</a><br>
+        · 法說會日期／地點：果仁家 <a href="https://applealmondrealty.com/posts/50493" target="_blank" rel="noopener">applealmondrealty.com/posts/50493</a>　/　中央社（法說前瞻）<a href="https://news.pchome.com.tw/finance/cna/20260705/index-17832246420261018003.html" target="_blank" rel="noopener">news.pchome.com.tw/finance/cna/20260705</a>
+      </div>
+      <br>· <b>【已確認】</b>台積電近年無股票分割、減資、盈餘轉增資配股（股利政策僅現金股利），股本維持約 2,593 億，歷年每股數字為同一基礎，可直接比較。<br>
+      · <b>即時報價非區間</b>：上表股價為 07/31 單一時點快照；7/28 的 2,280 為另一時點數字，兩者分開標註、非官方公布區間。<br>
+      · <b>【資料不足，無法確認】</b>：「近四季 EPS 87.39」為鉅亨口徑（月均價／近四季），本報告未逐季拆解覆核，精確數字仍以公司季報為準。
+    </div>
+
+    <p class="foot">報告版本 v1.1　·　更新時間 2026-08-02 05:19　·　第 1–2 步完成（第 3–6 步待進行）</p>
   </section>
 
 </div>
