@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>個股分析 · mystock-analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F4F1; --card:#FFFFFF; --ink:#16272D; --ink2:#5A6B70;
+  --line:#DCE0DC; --accent:#2E6F8E; --gold:#B98A34; --peak:#E7DABB;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Inter','Noto Sans TC',system-ui,sans-serif;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:0 22px 80px}
+.hdr{padding:56px 0 26px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,5vw,44px);
+  line-height:1.08;margin:0;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:15px;margin-top:10px;max-width:60ch}
+.list{margin:28px 0}
+a.rep{display:flex;align-items:center;gap:18px;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:20px 22px;margin:12px 0;transition:.16s}
+a.rep:hover{border-color:var(--accent);transform:translateY(-1px);
+  box-shadow:0 4px 14px rgba(22,39,45,.07)}
+.code{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:22px;
+  color:#fff;background:var(--accent);border-radius:10px;padding:12px 14px;
+  min-width:96px;text-align:center;letter-spacing:.02em}
+.meta{flex:1;min-width:0}
+.meta .nm{font-family:'Fraunces',serif;font-weight:600;font-size:20px;line-height:1.2}
+.meta .fn{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink2);
+  margin-top:4px;word-break:break-all}
+.go{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);
+  white-space:nowrap}
+.state{font-size:14px;color:var(--ink2);padding:24px 4px}
+.note{background:#fbfbf9;border:1px dashed var(--line);border-radius:8px;
+  padding:14px 16px;font-size:13px;color:var(--ink2);margin:24px 0 0}
+.note b{color:var(--ink)}
+.foot{padding:28px 0 0;color:var(--ink2);font-size:12.5px;
+  font-family:'IBM Plex Mono',monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hdr">
+    <p class="eyebrow">Stock Analysis Index</p>
+    <h1>個股分析報告</h1>
+    <p class="sub">六步驟框架：現金流盲測 → 基本資訊 → 法說會 → 營收趨勢 → 前瞻估值 → 投資決策。
+    點下方任一報告，直接開啟渲染後的網頁版。</p>
+  </header>
+
+  <div class="list" id="list">
+    <div class="state" id="state">載入報告清單中…</div>
+  </div>
+
+  <div class="note">
+    <b>使用方式：</b>把這頁的網址
+    <b>https://shawnlee0390.github.io/mystock-analysis/</b> 加到書籤即可。
+    這裡的每一份報告都是 GitHub Pages 渲染版；若你改從 github.com 的檔案頁點進去，看到的會是 HTML 原始碼（GitHub 的安全規則，非錯誤）。
+    清單由 GitHub API 自動產生，日後新增的 <code>_analysis.html</code> 會自動出現。
+  </div>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+(function(){
+  var OWNER = "shawnlee0390", REPO = "mystock-analysis";
+  var api = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/";
+  var listEl = document.getElementById("list");
+  var stateEl = document.getElementById("state");
+  var footEl = document.getElementById("foot");
+
+  // 由檔名解析：{code}_{name}_analysis.html -> 代號、名稱
+  function parse(fn){
+    var m = fn.replace(/\.html$/i, "").match(/^(\d{3,6})_(.+?)_analysis$/i);
+    if(m){ return { code:m[1], name:m[2].toUpperCase() }; }
+    return { code:"—", name:fn.replace(/\.html$/i,"") };
+  }
+
+  function card(item){
+    var p = parse(item.name);
+    var a = document.createElement("a");
+    a.className = "rep";
+    a.href = "./" + item.name;               // Pages 相對連結 → 渲染版
+    a.innerHTML =
+      '<span class="code">' + p.code + '</span>' +
+      '<span class="meta"><span class="nm">' + p.name + '</span>' +
+      '<span class="fn">' + item.name + '</span></span>' +
+      '<span class="go">開啟 →</span>';
+    return a;
+  }
+
+  function fallback(){
+    // API 失敗時，至少放上已知的 2330 報告
+    listEl.innerHTML = "";
+    listEl.appendChild(card({ name: "2330_tsmc_analysis.html" }));
+    footEl.textContent = "（清單自動更新失敗，顯示已知報告）";
+  }
+
+  fetch(api)
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(files){
+      var reps = files.filter(function(f){
+        return f.type === "file" && /_analysis\.html$/i.test(f.name);
+      });
+      if(!reps.length){ stateEl.textContent = "尚無分析報告。"; return; }
+      listEl.innerHTML = "";
+      reps.sort(function(a,b){ return a.name.localeCompare(b.name); });
+      reps.forEach(function(f){ listEl.appendChild(card(f)); });
+      footEl.textContent = "共 " + reps.length + " 份報告 · 清單由 GitHub API 自動產生";
+    })
+    .catch(function(){ fallback(); });
+})();
+</script>
+</body>
+</html>
