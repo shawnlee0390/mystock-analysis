@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>寶雅 5904 · 現金流體質健檢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Zilla+Slab:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2b1d3a; --ink2:#5a4a68; --paper:#faf6f0; --surface:#ffffff;
+  --plum:#7a3d9c; --plum-deep:#5a2b76; --plum-soft:#f0e6f6; --plum-line:#e3d3ee;
+  --pos:#1d7a56; --neg:#c0392b;
+  --peak:#e7ce93; --trough:#f0bcd0; --barfill:#a877c6;
+  --bB:#7a3d9c; --bC:#c98bdf;
+  --partial-bg:#efe7f4; --partial-line:#c9a9dd;
+  --grid:#eadfd4; --hi:#1d7a56; --mid:#c98a1e; --lo:#c0392b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans TC",system-ui,sans-serif;line-height:1.7;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:0 22px 90px}
+
+/* Header */
+header.hero{padding:52px 0 26px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:"Zilla Slab",serif;letter-spacing:.32em;text-transform:uppercase;
+  font-size:12px;color:var(--plum);font-weight:700;margin-bottom:14px}
+h1.title{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(34px,6vw,58px);
+  line-height:1.05;margin:0 0 6px;letter-spacing:-.5px}
+h1.title .code{color:var(--plum);font-family:"Zilla Slab",serif}
+.subtitle{font-size:15px;color:var(--ink2);max-width:640px;margin-top:12px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:20px;
+  font-size:13px;color:var(--ink2)}
+.hero-meta b{color:var(--ink)}
+
+/* Nav */
+nav.stepnav{position:sticky;top:0;z-index:20;background:rgba(250,246,240,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--plum-line);
+  margin:0 -22px 34px;padding:10px 22px;display:flex;gap:6px;overflow-x:auto}
+.pad{flex:0 0 auto;font-size:12.5px;padding:7px 13px;border-radius:20px;
+  border:1px solid transparent;color:var(--ink2);text-decoration:none;white-space:nowrap;
+  cursor:pointer;transition:.18s;font-weight:500}
+.pad .n{font-family:"Zilla Slab",serif;font-weight:700;color:var(--plum);margin-right:5px}
+.pad:hover{background:var(--plum-soft)}
+.pad.active{background:var(--plum);color:#fff;border-color:var(--plum)}
+.pad.active .n{color:#fff}
+.pad.locked{opacity:.42;cursor:not-allowed}
+.pad.locked .n{color:var(--ink2)}
+.pad.locked:hover{background:transparent}
+
+/* Sections */
+section{padding:30px 0 8px;scroll-margin-top:70px}
+.step-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.step-tag{font-family:"Zilla Slab",serif;font-weight:700;font-size:13px;color:#fff;
+  background:var(--plum);padding:4px 11px;border-radius:5px;letter-spacing:.04em}
+h2{font-family:"Noto Serif TC",serif;font-weight:700;font-size:26px;margin:2px 0 0}
+
+/* callout */
+.callout{background:var(--plum-soft);border-left:5px solid var(--plum);
+  border-radius:0 10px 10px 0;padding:16px 20px;margin:20px 0 28px}
+.callout .kh{font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--plum-deep);
+  text-transform:uppercase;font-family:"Zilla Slab",serif;margin-bottom:6px}
+.callout p{margin:4px 0;font-size:15px}
+.callout b{color:var(--ink)}
+.callout .negv{color:var(--neg);font-weight:700}
+.callout .posv{color:var(--pos);font-weight:700}
+
+/* score dashboard */
+.dash{display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center;
+  background:var(--surface);border:1px solid var(--plum-line);border-radius:16px;
+  padding:26px 28px;margin:8px 0 30px;box-shadow:0 2px 0 var(--plum-line)}
+.gauge{text-align:center}
+.gauge .big{font-family:"Zilla Slab",serif;font-weight:700;font-size:74px;line-height:1;
+  color:var(--plum-deep)}
+.gauge .unit{font-size:26px;color:var(--ink2)}
+.gauge .grade{margin-top:6px;display:inline-block;background:var(--pos);color:#fff;
+  font-weight:700;font-size:13px;padding:4px 14px;border-radius:20px;letter-spacing:.08em}
+.gauge .gl{font-size:12px;color:var(--ink2);margin-top:10px;font-family:"Zilla Slab",serif;
+  letter-spacing:.14em;text-transform:uppercase}
+.scorebar{margin:11px 0}
+.sb-head{display:flex;align-items:center;gap:9px;font-size:13.5px;margin-bottom:4px}
+.sb-idx{font-family:"Zilla Slab",serif;font-weight:700;color:var(--plum);font-size:12px}
+.sb-name{flex:1;color:var(--ink)}
+.sb-val{font-family:"Zilla Slab",serif;font-weight:700;font-size:16px}
+.sb-val.hi{color:var(--hi)} .sb-val.mid{color:var(--mid)} .sb-val.lo{color:var(--lo)}
+.sb-track{height:8px;background:var(--plum-soft);border-radius:5px;overflow:hidden}
+.sb-fill{height:100%;border-radius:5px}
+.sb-fill.hi{background:var(--pos)} .sb-fill.mid{background:var(--mid)} .sb-fill.lo{background:var(--lo)}
+
+/* rule blocks */
+.rule{margin:34px 0;padding-top:8px;border-top:1px dashed var(--plum-line)}
+.rule-h{display:flex;align-items:baseline;gap:11px;margin-bottom:4px}
+.rule-n{font-family:"Zilla Slab",serif;font-weight:700;font-size:15px;color:#fff;
+  background:var(--ink);width:30px;height:30px;border-radius:50%;display:grid;
+  place-items:center;flex:0 0 auto}
+.rule-t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:19px}
+.rule-sc{margin-left:auto;font-family:"Zilla Slab",serif;font-weight:700;font-size:15px;
+  padding:3px 12px;border-radius:20px;background:var(--plum-soft);color:var(--plum-deep)}
+.persona{display:inline-block;background:var(--ink);color:#fff;font-size:12.5px;
+  font-weight:500;padding:3px 12px;border-radius:5px;margin:4px 0 8px}
+.rule p{font-size:14.5px;margin:8px 0}
+.rule p .num{font-family:"Zilla Slab",serif;font-weight:700}
+.rule p .posv{color:var(--pos);font-weight:700}
+.rule p .negv{color:var(--neg);font-weight:700}
+
+/* svg chart */
+.chartbox{background:var(--surface);border:1px solid var(--plum-line);border-radius:12px;
+  padding:16px 10px 8px;margin:16px 0}
+.bar-svg{width:100%;height:auto;display:block}
+.axis{stroke:var(--ink);stroke-width:1.4}
+.axlab{fill:var(--ink2);font-size:11px;font-family:"Zilla Slab",serif}
+.barval{fill:var(--ink);font-size:12.5px;font-weight:700;font-family:"Zilla Slab",serif}
+.barval.sm{font-size:11px;fill:var(--ink2)}
+.barlab{fill:var(--ink2);font-size:12.5px;font-weight:500}
+.barlab.pt{fill:var(--plum);font-style:italic}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink2);
+  padding:2px 8px 6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;
+  margin-right:5px;vertical-align:-1px}
+.cap{font-size:13px;color:var(--ink2);margin:6px 2px 0;padding-left:2px}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--grid)}
+th{background:var(--ink);color:#fff;font-weight:500;font-size:12.5px;
+  position:sticky;top:0}
+th:first-child,td:first-child{text-align:left}
+td.yr,td.yr{font-weight:700;font-family:"Zilla Slab",serif;text-align:left}
+td.pos{color:var(--pos)} td.neg{color:var(--neg)} td.muted{color:var(--ink2)}
+tr.qrow td{background:var(--plum-soft);color:var(--ink2)}
+.qtag{background:var(--plum);color:#fff;font-size:10px;padding:1px 6px;border-radius:4px;
+  margin-left:4px;font-family:"Zilla Slab",serif}
+.ok{color:var(--pos);font-weight:700} .ng{color:var(--neg);font-weight:700}
+
+/* verdict */
+.verdict{background:var(--ink);color:#f3ecf7;border-radius:16px;padding:28px 30px;margin:36px 0 10px}
+.verdict h3{font-family:"Noto Serif TC",serif;font-size:22px;margin:0 0 10px;color:#fff}
+.verdict .pass{display:inline-block;background:var(--pos);color:#fff;font-weight:700;
+  padding:5px 16px;border-radius:20px;font-size:14px;margin-bottom:14px;letter-spacing:.06em}
+.verdict p{font-size:15px;margin:8px 0;color:#e8ddef}
+.verdict b{color:#fff}
+
+/* placeholder future steps */
+.future{opacity:.5;padding:22px 0;border-top:1px dashed var(--plum-line);margin-top:20px}
+.future .step-tag{background:var(--ink2)}
+.future p{font-size:14px;color:var(--ink2)}
+
+footer{margin-top:44px;padding-top:20px;border-top:2px solid var(--ink);
+  font-size:12.5px;color:var(--ink2)}
+footer .ver{font-family:"Zilla Slab",serif;font-weight:700;color:var(--plum-deep)}
+.src{background:#f3ecdf;border:1px dashed #d8c69a;border-radius:10px;padding:12px 16px;
+  margin:16px 0;font-size:12.5px;color:#6b5a2e}
+.src b{color:#4d3f16}
+
+@media(max-width:620px){
+  .dash{grid-template-columns:1fr}
+  .gauge{border-bottom:1px solid var(--plum-line);padding-bottom:18px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Cash-Flow Health Check · 盲測階段</div>
+  <h1 class="title">寶雅 <span class="code">5904</span></h1>
+  <p class="subtitle">六大規則現金流量體質健檢——此階段刻意不看股價、EPS、產業地位與新聞題材，
+  只根據現金流量表本身的數字做客觀判讀，避免先入為主。</p>
+  <div class="hero-meta">
+    <span>計分基準：<b>2020–2025 完整年度</b></span>
+    <span>26Q2：<b>單一期間，僅列示不計分</b></span>
+    <span>資料：<b>使用者提供截圖</b></span>
+  </div>
+</header>
+
+<nav class="stepnav" id="nav">
+  <a class="pad active" data-target="step1"><span class="n">1</span>現金流六大規則</a>
+  <a class="pad locked"><span class="n">2</span>基本資訊查詢</a>
+  <a class="pad locked"><span class="n">3</span>法說會討論</a>
+  <a class="pad locked"><span class="n">4</span>營收趨勢</a>
+  <a class="pad locked"><span class="n">5</span>前瞻本益比</a>
+  <a class="pad locked"><span class="n">6</span>投資決策</a>
+</nav>
+
+<section id="step1">
+  <div class="step-head">
+    <span class="step-tag">第 1 步 / 共 6 步</span>
+  </div>
+  <h2>現金流量表 · 六大規則分析</h2>
+
+  <div class="callout">
+    <div class="kh">重點提示</div>
+    <p>總分 <b>94 分</b>（<span class="posv">優秀，≥80</span>）——六項規則全數落在高分區。</p>
+    <p>營業現金流（A）<b>連續六年逐年成長</b>（37.7→59 億），且 <b>A&gt;D 六年全過（100%）</b>，
+    帳面獲利全數轉成真金白銀，<b>沒有膨風灌水</b>。</p>
+    <p>更關鍵：<b>沒有任何「本業失血＋舉債」警訊</b>——A 年年為正、C 年年大幅為負（把賺到的錢還給股東），
+    投資完全靠自己造血支應。<span class="posv">現金流體質可以繼續往下看。</span></p>
+  </div>
+
+  <div class="dash">
+    <div class="gauge">
+      <div><span class="big">94</span><span class="unit">/100</span></div>
+      <div class="grade">優秀 EXCELLENT</div>
+      <div class="gl">六項平均</div>
+    </div>
+    <div class="scores">
+      <div class="scorebar">
+      <div class="sb-head"><span class="sb-idx">規則 1</span><span class="sb-name">A 逐年成長趨勢</span><span class="sb-val hi">98</span></div>
+      <div class="sb-track"><div class="sb-fill hi" style="width:98%"></div></div>
+    </div>
+<div class="scorebar">
+      <div class="sb-head"><span class="sb-idx">規則 2</span><span class="sb-name">B 投資紀律</span><span class="sb-val hi">90</span></div>
+      <div class="sb-track"><div class="sb-fill hi" style="width:90%"></div></div>
+    </div>
+<div class="scorebar">
+      <div class="sb-head"><span class="sb-idx">規則 3</span><span class="sb-name">B 投資效益</span><span class="sb-val hi">90</span></div>
+      <div class="sb-track"><div class="sb-fill hi" style="width:90%"></div></div>
+    </div>
+<div class="scorebar">
+      <div class="sb-head"><span class="sb-idx">規則 4</span><span class="sb-name">C 融資合理性</span><span class="sb-val hi">98</span></div>
+      <div class="sb-track"><div class="sb-fill hi" style="width:98%"></div></div>
+    </div>
+<div class="scorebar">
+      <div class="sb-head"><span class="sb-idx">規則 5</span><span class="sb-name">A > D 現金流品質</span><span class="sb-val hi">100</span></div>
+      <div class="sb-track"><div class="sb-fill hi" style="width:100%"></div></div>
+    </div>
+<div class="scorebar">
+      <div class="sb-head"><span class="sb-idx">規則 6</span><span class="sb-name">E 期末餘額穩定性</span><span class="sb-val hi">88</span></div>
+      <div class="sb-track"><div class="sb-fill hi" style="width:88%"></div></div>
+    </div>
+    </div>
+  </div>
+
+  <!-- 主數據表 -->
+  <h3 style="font-family:'Noto Serif TC';font-size:18px;margin:30px 0 4px">現金流量總表（單位：億元）</h3>
+  <p class="cap">正值以綠色、負值以紅色標示。投資（B）／融資（C）為負屬正常現象，代表「持續投資」與「回饋股東／還債」。</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr>
+      <th>年度</th><th>A 營業</th><th>B 投資</th><th>C 融資</th>
+      <th>D 稅前淨利</th><th>E 期末餘額</th><th>稅後淨利</th><th>稅後EPS</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+      <td class="yr">2020</td>
+      <td class="pos">37.7</td><td class="neg">-11.0</td><td class="neg">-22.2</td><td class="pos">26.1</td>
+      <td class="pos">17.2</td>
+      <td class="muted">21.1</td>
+      <td class="muted">21.60</td>
+    </tr>
+<tr>
+      <td class="yr">2021</td>
+      <td class="pos">39.6</td><td class="neg">-9.3</td><td class="neg">-18.9</td><td class="pos">23.0</td>
+      <td class="pos">28.6</td>
+      <td class="muted">18.4</td>
+      <td class="muted">18.25</td>
+    </tr>
+<tr>
+      <td class="yr">2022</td>
+      <td class="pos">45.9</td><td class="neg">-6.0</td><td class="neg">-42.7</td><td class="pos">25.9</td>
+      <td class="pos">25.9</td>
+      <td class="muted">20.7</td>
+      <td class="muted">20.26</td>
+    </tr>
+<tr>
+      <td class="yr">2023</td>
+      <td class="pos">48.0</td><td class="neg">-10.9</td><td class="neg">-43.0</td><td class="pos">31.5</td>
+      <td class="pos">19.9</td>
+      <td class="muted">25.3</td>
+      <td class="muted">24.41</td>
+    </tr>
+<tr>
+      <td class="yr">2024</td>
+      <td class="pos">53.7</td><td class="neg">-13.2</td><td class="neg">-32.1</td><td class="pos">35.1</td>
+      <td class="pos">28.3</td>
+      <td class="muted">28.0</td>
+      <td class="muted">26.74</td>
+    </tr>
+<tr>
+      <td class="yr">2025</td>
+      <td class="pos">59.0</td><td class="neg">-11.5</td><td class="neg">-39.1</td><td class="pos">39.2</td>
+      <td class="pos">36.7</td>
+      <td class="muted">31.4</td>
+      <td class="muted">29.54</td>
+    </tr>
+<tr class="qrow">
+      <td class="yr">26Q2 <span class="qtag">單季</span></td>
+      <td class="pos">33.6</td><td class="neg">-8.4</td><td class="neg">-9.1</td><td class="pos">23.2</td>
+      <td class="pos">52.9</td>
+      <td class="muted">18.6</td>
+      <td class="muted">17.45</td>
+    </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <!-- 規則一 -->
+  <div class="rule" id="r1">
+    <div class="rule-h"><span class="rule-n">1</span><span class="rule-t">A 逐年成長趨勢</span>
+      <span class="rule-sc">98 分</span></div>
+    <span class="persona">個性標籤：穩紮穩打的資優生</span>
+    <p><b>數字現象：</b>營業活動現金流從 2020 的 <span class="num">37.7</span> 億，一路
+    <span class="posv">連續六年不間斷成長</span>到 2025 的 <span class="num">59.0</span> 億，
+    中間<b>沒有任何一年下滑</b>。這種六年全綠、單調上升的曲線在台股相當少見。</p>
+    <div class="chartbox"><svg viewBox="0 0 720 300" role="img" class="bar-svg">
+<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--partial-bg)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--partial-line)" stroke-width="2"/></pattern></defs>
+<line x1="48" y1="254.0" x2="702" y2="254.0" class="axis"/>
+<text x="44" y="258.0" class="axlab" text-anchor="end">0</text>
+<rect x="72.4" y="117.3" width="52.0" height="136.7" rx="3" fill="var(--trough)" class="bar"/>
+<text x="98.4" y="110.3" class="barval" text-anchor="middle">37.7</text>
+<text x="98.4" y="284" class="barlab" text-anchor="middle">2020</text>
+<rect x="165.3" y="110.4" width="52.0" height="143.6" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="191.3" y="103.4" class="barval" text-anchor="middle">39.6</text>
+<text x="191.3" y="284" class="barlab" text-anchor="middle">2021</text>
+<rect x="258.1" y="87.5" width="52.0" height="166.5" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="284.1" y="80.5" class="barval" text-anchor="middle">45.9</text>
+<text x="284.1" y="284" class="barlab" text-anchor="middle">2022</text>
+<rect x="351.0" y="79.9" width="52.0" height="174.1" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="377.0" y="72.9" class="barval" text-anchor="middle">48.0</text>
+<text x="377.0" y="284" class="barlab" text-anchor="middle">2023</text>
+<rect x="443.9" y="59.2" width="52.0" height="194.8" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="469.9" y="52.2" class="barval" text-anchor="middle">53.7</text>
+<text x="469.9" y="284" class="barlab" text-anchor="middle">2024</text>
+<rect x="536.7" y="40.0" width="52.0" height="214.0" rx="3" fill="var(--peak)" class="bar"/>
+<text x="562.7" y="33.0" class="barval" text-anchor="middle">59.0</text>
+<text x="562.7" y="284" class="barlab" text-anchor="middle">2025</text>
+<rect x="629.6" y="132.1" width="52.0" height="121.9" rx="3" fill="url(#hatch)" class="bar partial"/>
+<text x="655.6" y="125.1" class="barval" text-anchor="middle">33.6</text>
+<text x="655.6" y="284" class="barlab pt" text-anchor="middle">26Q2</text>
+</svg>
+      <div class="legend"><span><i style="background:var(--peak)"></i>年度高峰</span>
+      <span><i style="background:var(--trough)"></i>年度低點</span>
+      <span><i style="background:var(--barfill)"></i>一般年度</span>
+      <span><i style="background:var(--partial-bg);border:1px solid var(--partial-line)"></i>26Q2（單期，不計分）</span></div>
+    </div>
+    <p class="cap">季度會有正常淡旺季波動不苛責；此規則重點看「中長期方向」——寶雅方向明確向上。</p>
+  </div>
+
+  <!-- 規則二 -->
+  <div class="rule" id="r2">
+    <div class="rule-h"><span class="rule-n">2</span><span class="rule-t">B 投資紀律</span>
+      <span class="rule-sc">90 分</span></div>
+    <span class="persona">個性標籤：量入為出的擴店者</span>
+    <p><b>數字現象：</b>投資活動年年為負（<span class="num">-5.96 ~ -13.2</span> 億），代表持續投資（展店、裝修），
+    屬正常。關鍵是 <b>|B| 始終遠小於 A</b>——2025 年 |B|=<span class="num">11.5</span> 億相對 A=<span class="num">59</span> 億，
+    僅約 <b>19%</b>。這是<b>非資本密集的零售通路</b>特性，展店支出完全由本業現金支應，投資規模克制。</p>
+    <div class="chartbox"><svg viewBox="0 0 720 300" role="img" class="bar-svg">
+<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--partial-bg)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--partial-line)" stroke-width="2"/></pattern></defs>
+<line x1="48" y1="34.0" x2="702" y2="34.0" class="axis"/>
+<text x="44" y="38.0" class="axlab" text-anchor="end">0</text>
+<rect x="72.4" y="34.0" width="52.0" height="178.3" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="98.4" y="227.3" class="barval" text-anchor="middle">-11.00</text>
+<text x="98.4" y="284" class="barlab" text-anchor="middle">2020</text>
+<rect x="165.3" y="34.0" width="52.0" height="151.3" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="191.3" y="200.3" class="barval" text-anchor="middle">-9.33</text>
+<text x="191.3" y="284" class="barlab" text-anchor="middle">2021</text>
+<rect x="258.1" y="34.0" width="52.0" height="96.6" rx="3" fill="var(--peak)" class="bar"/>
+<text x="284.1" y="145.6" class="barval" text-anchor="middle">-5.96</text>
+<text x="284.1" y="284" class="barlab" text-anchor="middle">2022</text>
+<rect x="351.0" y="34.0" width="52.0" height="176.7" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="377.0" y="225.7" class="barval" text-anchor="middle">-10.90</text>
+<text x="377.0" y="284" class="barlab" text-anchor="middle">2023</text>
+<rect x="443.9" y="34.0" width="52.0" height="214.0" rx="3" fill="var(--trough)" class="bar"/>
+<text x="469.9" y="263.0" class="barval" text-anchor="middle">-13.20</text>
+<text x="469.9" y="284" class="barlab" text-anchor="middle">2024</text>
+<rect x="536.7" y="34.0" width="52.0" height="186.4" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="562.7" y="235.4" class="barval" text-anchor="middle">-11.50</text>
+<text x="562.7" y="284" class="barlab" text-anchor="middle">2025</text>
+<rect x="629.6" y="34.0" width="52.0" height="135.7" rx="3" fill="url(#hatch)" class="bar partial"/>
+<text x="655.6" y="184.7" class="barval" text-anchor="middle">-8.37</text>
+<text x="655.6" y="284" class="barlab pt" text-anchor="middle">26Q2</text>
+</svg>
+      <div class="legend"><span><i style="background:var(--trough)"></i>投資最重年</span>
+      <span><i style="background:var(--peak)"></i>投資最輕年</span>
+      <span><i style="background:var(--barfill)"></i>一般年度</span></div>
+    </div>
+    <p class="cap">提醒：投資活動仍應檢視細項「固定資產（增加）」才是廠房設備等資本支出主項；此表僅有總額，
+    細項待第二步後如有法說會揭露再補。</p>
+  </div>
+
+  <!-- 規則三 -->
+  <div class="rule" id="r3">
+    <div class="rule-h"><span class="rule-n">3</span><span class="rule-t">B 投資效益</span>
+      <span class="rule-sc">90 分</span></div>
+    <span class="persona">個性標籤：投一塊、賺回一塊多</span>
+    <p><b>數字現象：</b>對照「今年投資（B）」與「隔年營業現金流（A）」——每一個投資年度的隔年，
+    A 幾乎都<span class="posv">同步走高</span>，投資有效轉化為造血能力，效益穩定。</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>投資年度</th><th>當年 B</th><th>當年 A</th><th>隔年</th><th>隔年 A</th><th>A 變化</th></tr></thead>
+      <tbody><tr>
+      <td class="yr">2020</td><td class="neg">-11.00</td>
+      <td>37.7</td><td>2021</td><td>39.6</td>
+      <td class="pos">+1.9（↑ 成長）</td>
+    </tr>
+<tr>
+      <td class="yr">2021</td><td class="neg">-9.33</td>
+      <td>39.6</td><td>2022</td><td>45.9</td>
+      <td class="pos">+6.3（↑ 成長）</td>
+    </tr>
+<tr>
+      <td class="yr">2022</td><td class="neg">-5.96</td>
+      <td>45.9</td><td>2023</td><td>48.0</td>
+      <td class="pos">+2.1（↑ 成長）</td>
+    </tr>
+<tr>
+      <td class="yr">2023</td><td class="neg">-10.90</td>
+      <td>48.0</td><td>2024</td><td>53.7</td>
+      <td class="pos">+5.7（↑ 成長）</td>
+    </tr>
+<tr>
+      <td class="yr">2024</td><td class="neg">-13.20</td>
+      <td>53.7</td><td>2025</td><td>59.0</td>
+      <td class="pos">+5.3（↑ 成長）</td>
+    </tr>
+</tbody>
+    </table>
+    </div>
+    <p class="cap">跨年度因果比較用表格逐列對照（今年做的事 → 明年結果），年度錯位，比長條圖更清楚。</p>
+  </div>
+
+  <!-- 規則四 -->
+  <div class="rule" id="r4">
+    <div class="rule-h"><span class="rule-n">4</span><span class="rule-t">C 融資合理性</span>
+      <span class="rule-sc">98 分</span></div>
+    <span class="persona">個性標籤：邊賺邊發、不靠借錢</span>
+    <p><b>數字現象：</b>融資活動（C）<b>年年大幅為負</b>（<span class="num">-18.9 ~ -43</span> 億），
+    代表把賺來的錢拿去<b>發股利／還債</b>。對照最嚴重警訊定義——「A 為負 且 C 為正或小幅負值（疑似舉債支應）」——
+    寶雅 <b>A 年年強勁為正、C 年年大幅為負</b>，<span class="posv">完全沒有觸及任何舉債警訊</span>。</p>
+    <div class="chartbox"><svg viewBox="0 0 720 320" role="img" class="bar-svg">
+<line x1="48" y1="30.0" x2="702" y2="30.0" class="axis"/>
+<text x="44" y="34.0" class="axlab" text-anchor="end">0</text>
+<rect x="69.6" y="30.0" width="25.8" height="60.4" rx="2.5" fill="var(--bB)"/>
+<text x="82.5" y="103.4" class="barval sm" text-anchor="middle">-11.0</text>
+<rect x="101.4" y="30.0" width="25.8" height="121.8" rx="2.5" fill="var(--bC)"/>
+<text x="114.3" y="164.8" class="barval sm" text-anchor="middle">-22.2</text>
+<text x="98.4" y="304" class="barlab" text-anchor="middle">2020</text>
+<rect x="162.5" y="30.0" width="25.8" height="51.2" rx="2.5" fill="var(--bB)"/>
+<text x="175.4" y="94.2" class="barval sm" text-anchor="middle">-9.3</text>
+<rect x="194.3" y="30.0" width="25.8" height="103.7" rx="2.5" fill="var(--bC)"/>
+<text x="207.2" y="146.7" class="barval sm" text-anchor="middle">-18.9</text>
+<text x="191.3" y="304" class="barlab" text-anchor="middle">2021</text>
+<rect x="255.4" y="30.0" width="25.8" height="32.7" rx="2.5" fill="var(--bB)"/>
+<text x="268.3" y="75.7" class="barval sm" text-anchor="middle">-6.0</text>
+<rect x="287.1" y="30.0" width="25.8" height="234.4" rx="2.5" fill="var(--bC)"/>
+<text x="300.0" y="277.4" class="barval sm" text-anchor="middle">-42.7</text>
+<text x="284.1" y="304" class="barlab" text-anchor="middle">2022</text>
+<rect x="348.2" y="30.0" width="25.8" height="59.8" rx="2.5" fill="var(--bB)"/>
+<text x="361.1" y="102.8" class="barval sm" text-anchor="middle">-10.9</text>
+<rect x="380.0" y="30.0" width="25.8" height="236.0" rx="2.5" fill="var(--bC)"/>
+<text x="392.9" y="279.0" class="barval sm" text-anchor="middle">-43.0</text>
+<text x="377.0" y="304" class="barlab" text-anchor="middle">2023</text>
+<rect x="441.1" y="30.0" width="25.8" height="72.4" rx="2.5" fill="var(--bB)"/>
+<text x="454.0" y="115.4" class="barval sm" text-anchor="middle">-13.2</text>
+<rect x="472.9" y="30.0" width="25.8" height="176.2" rx="2.5" fill="var(--bC)"/>
+<text x="485.8" y="219.2" class="barval sm" text-anchor="middle">-32.1</text>
+<text x="469.9" y="304" class="barlab" text-anchor="middle">2024</text>
+<rect x="533.9" y="30.0" width="25.8" height="63.1" rx="2.5" fill="var(--bB)"/>
+<text x="546.8" y="106.1" class="barval sm" text-anchor="middle">-11.5</text>
+<rect x="565.7" y="30.0" width="25.8" height="214.6" rx="2.5" fill="var(--bC)"/>
+<text x="578.6" y="257.6" class="barval sm" text-anchor="middle">-39.1</text>
+<text x="562.7" y="304" class="barlab" text-anchor="middle">2025</text>
+<rect x="626.8" y="30.0" width="25.8" height="45.9" rx="2.5" fill="var(--bB)" opacity="0.45"/>
+<text x="639.7" y="88.9" class="barval sm" text-anchor="middle">-8.4</text>
+<rect x="658.6" y="30.0" width="25.8" height="49.9" rx="2.5" fill="var(--bC)" opacity="0.45"/>
+<text x="671.5" y="92.9" class="barval sm" text-anchor="middle">-9.1</text>
+<text x="655.6" y="304" class="barlab pt" text-anchor="middle">26Q2</text>
+</svg>
+      <div class="legend"><span><i style="background:var(--bB)"></i>B 投資活動</span>
+      <span><i style="background:var(--bC)"></i>C 融資活動</span>
+      <span>（兩根同時往下＝當年沒有「借錢投資」組合）</span></div>
+    </div>
+    <p class="cap">兩數列同年並排：若出現「B 大幅負、C 卻為正」才是警訊；寶雅每一年 B、C 都往下，
+    是「本業養投資、還大方回饋股東」的健康結構。<br>
+    <b>限制：</b>此表只有 C 總額，無法拆出「還債 vs 現金股利」細項；但因 A 全期為正、無舉債警訊，不影響總判斷。</p>
+  </div>
+
+  <!-- 規則五 -->
+  <div class="rule" id="r5">
+    <div class="rule-h"><span class="rule-n">5</span><span class="rule-t">A &gt; D 現金流品質</span>
+      <span class="rule-sc">100 分</span></div>
+    <span class="persona">個性標籤：帳上賺多少、口袋就進多少（還更多）</span>
+    <p><b>數字現象：</b>採嚴格二分法逐年判斷。寶雅 <b>六個完整年度、A 全數大於 D</b>，
+    通過率 <span class="posv">100%</span>。營業現金流長期高於稅前淨利（零售業折舊、租賃費用回加），
+    是<b>獲利品質極佳</b>的訊號，與「膨風灌水」完全相反。</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>年度</th><th>A 營業</th><th>D 稅前淨利</th><th>A − D</th><th>判定</th></tr></thead>
+      <tbody><tr>
+      <td class="yr">2020</td><td>37.7</td><td>26.1</td>
+      <td>+11.6</td><td><span class="ok">✔ 通過</span></td>
+    </tr>
+<tr>
+      <td class="yr">2021</td><td>39.6</td><td>23.0</td>
+      <td>+16.6</td><td><span class="ok">✔ 通過</span></td>
+    </tr>
+<tr>
+      <td class="yr">2022</td><td>45.9</td><td>25.9</td>
+      <td>+20.0</td><td><span class="ok">✔ 通過</span></td>
+    </tr>
+<tr>
+      <td class="yr">2023</td><td>48.0</td><td>31.5</td>
+      <td>+16.5</td><td><span class="ok">✔ 通過</span></td>
+    </tr>
+<tr>
+      <td class="yr">2024</td><td>53.7</td><td>35.1</td>
+      <td>+18.6</td><td><span class="ok">✔ 通過</span></td>
+    </tr>
+<tr>
+      <td class="yr">2025</td><td>59.0</td><td>39.2</td>
+      <td>+19.8</td><td><span class="ok">✔ 通過</span></td>
+    </tr>
+</tbody>
+    </table>
+    </div>
+    <p class="cap">單項分數 = 通過年數 ÷ 總年數 × 100 = 6 ÷ 6 × 100 = <b>100</b>。不設倍數門檻，只看每年 A 是否大於 D。</p>
+  </div>
+
+  <!-- 規則六 -->
+  <div class="rule" id="r6">
+    <div class="rule-h"><span class="rule-n">6</span><span class="rule-t">E 期末餘額穩定性</span>
+      <span class="rule-sc">88 分</span></div>
+    <span class="persona">個性標籤：不囤現金、但底氣越來越厚</span>
+    <p><b>數字現象：</b>期末現金餘額整體<span class="posv">震盪走高</span>（17.2 → 36.7 億），
+    2023 年短暫回落至 <span class="num">19.9</span> 億，正好對應該年最大的股利／還債支出（C=<span class="negv">-43</span> 億）。
+    這種「不過度囤積現金、賺到就回饋、但底部逐年墊高」的樣態，其實是<b>良好的資本紀律</b>，非體質變差。</p>
+    <div class="chartbox"><svg viewBox="0 0 720 300" role="img" class="bar-svg">
+<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--partial-bg)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--partial-line)" stroke-width="2"/></pattern></defs>
+<line x1="48" y1="254.0" x2="702" y2="254.0" class="axis"/>
+<text x="44" y="258.0" class="axlab" text-anchor="end">0</text>
+<rect x="72.4" y="184.4" width="52.0" height="69.6" rx="3" fill="var(--trough)" class="bar"/>
+<text x="98.4" y="177.4" class="barval" text-anchor="middle">17.2</text>
+<text x="98.4" y="284" class="barlab" text-anchor="middle">2020</text>
+<rect x="165.3" y="138.3" width="52.0" height="115.7" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="191.3" y="131.3" class="barval" text-anchor="middle">28.6</text>
+<text x="191.3" y="284" class="barlab" text-anchor="middle">2021</text>
+<rect x="258.1" y="149.2" width="52.0" height="104.8" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="284.1" y="142.2" class="barval" text-anchor="middle">25.9</text>
+<text x="284.1" y="284" class="barlab" text-anchor="middle">2022</text>
+<rect x="351.0" y="173.5" width="52.0" height="80.5" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="377.0" y="166.5" class="barval" text-anchor="middle">19.9</text>
+<text x="377.0" y="284" class="barlab" text-anchor="middle">2023</text>
+<rect x="443.9" y="139.5" width="52.0" height="114.5" rx="3" fill="var(--barfill)" class="bar"/>
+<text x="469.9" y="132.5" class="barval" text-anchor="middle">28.3</text>
+<text x="469.9" y="284" class="barlab" text-anchor="middle">2024</text>
+<rect x="536.7" y="105.5" width="52.0" height="148.5" rx="3" fill="var(--peak)" class="bar"/>
+<text x="562.7" y="98.5" class="barval" text-anchor="middle">36.7</text>
+<text x="562.7" y="284" class="barlab" text-anchor="middle">2025</text>
+<rect x="629.6" y="40.0" width="52.0" height="214.0" rx="3" fill="url(#hatch)" class="bar partial"/>
+<text x="655.6" y="33.0" class="barval" text-anchor="middle">52.9</text>
+<text x="655.6" y="284" class="barlab pt" text-anchor="middle">26Q2</text>
+</svg>
+      <div class="legend"><span><i style="background:var(--peak)"></i>完整年度最高</span>
+      <span><i style="background:var(--trough)"></i>完整年度最低</span>
+      <span><i style="background:var(--partial-bg);border:1px solid var(--partial-line)"></i>26Q2（單期）</span></div>
+    </div>
+    <p class="cap">長期（6 年）維持在 17～37 億穩定且墊高的區間，26Q2 更達 52.9 億，無結構性下滑。</p>
+  </div>
+
+  <!-- 關卡判斷 -->
+  <div class="verdict">
+    <span class="pass">✔ 關卡通過 · 現金流體質可繼續深入</span>
+    <h3>總評：自給自足的績優生型現金流</h3>
+    <p>寶雅六大規則平均 <b>94 分（優秀）</b>。整體個性是——
+    <b>本業年年多賺、獲利全數轉成現金、投資完全自給自足、還能大方把錢還給股東</b>，
+    全期沒有任何一次倚賴外部舉債，也沒有帳面灌水。</p>
+    <p>依框架關卡規則，總分 ≥60% 且無三重疊加風險訊號 → <b>現金流體質可以繼續看下去</b>，
+    接著才進入第二步（股價、EPS、殖利率、營收、法說會）。</p>
+  </div>
+
+  <div class="src">
+    <b>資料來源備註：</b>本步驟所有現金流數字均為<b>使用者提供之 Goodinfo 現金流量表截圖</b>
+    （非本次網路搜尋所得），Claude 未自行抓取或臆測任何數字；缺漏欄位一律留白。
+    盲測階段刻意未查詢股價／EPS／產業地位／新聞題材。
+  </div>
+
+  <!-- 未完成步驟預覽 -->
+  <div class="future">
+    <span class="step-tag">第 2–6 步 · 待進行</span>
+    <p>第 2 步起將查詢基本資訊（股價、EPS、殖利率、營收、法說會連結，附實際來源），
+    並依序完成營收趨勢視覺化、前瞻本益比／EPS 估值。第 6 步投資決策僅在你主動詢問時才做。
+    上方導覽選單的灰階項目會在對應步驟完成後解鎖。</p>
+  </div>
+</section>
+
+<footer>
+  <p><span class="ver">寶雅 5904 · 現金流健檢報告 v1.0（第 1 步完成）</span>　生成時間：2026-08-03 00:42</p>
+  <p>本報告為初步分析框架產物，非投資建議。市場數據以你自己的看盤軟體／券商 App 為準。</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var pads = Array.prototype.slice.call(document.querySelectorAll('.pad'));
+  // 點擊：僅未鎖定的 pad 平滑捲動
+  pads.forEach(function(p){
+    if(p.classList.contains('locked')) return;
+    p.addEventListener('click', function(){
+      var id = p.getAttribute('data-target');
+      var el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  // 捲動：IntersectionObserver 動態反白目前所在 section
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+  if('IntersectionObserver' in window && sections.length){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var id = e.target.id;
+          pads.forEach(function(p){
+            if(p.classList.contains('locked')) return;
+            p.classList.toggle('active', p.getAttribute('data-target')===id);
+          });
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    sections.forEach(function(s){ obs.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
