@@ -155,6 +155,29 @@ footer .ver{font-family:"Zilla Slab",serif;font-weight:700;color:var(--plum-deep
 .src{background:#f3ecdf;border:1px dashed #d8c69a;border-radius:10px;padding:12px 16px;
   margin:16px 0;font-size:12.5px;color:#6b5a2e}
 .src b{color:#4d3f16}
+.src a,td a{color:var(--plum-deep);text-decoration:none;border-bottom:1px solid var(--plum-line)}
+.src a:hover,td a:hover{border-bottom-color:var(--plum-deep)}
+h3.sub{font-family:"Noto Serif TC",serif;font-size:18px;font-weight:700;
+  margin:30px 0 6px;padding-left:11px;border-left:4px solid var(--plum)}
+/* 橫向 EPS 長條 */
+.hbars{padding:18px 18px 10px}
+.hbar{display:flex;align-items:center;gap:10px;margin:7px 0}
+.hb-y{flex:0 0 84px;font-family:"Zilla Slab",serif;font-weight:700;font-size:13px;color:var(--ink2)}
+.hb-t{flex:1;height:16px;background:var(--plum-soft);border-radius:4px;overflow:hidden}
+.hb-f{display:block;height:100%;background:var(--barfill);border-radius:4px}
+.hb-f.partial{background:repeating-linear-gradient(45deg,var(--partial-bg),var(--partial-bg) 4px,var(--partial-line) 4px,var(--partial-line) 6px)}
+.hb-v{flex:0 0 52px;text-align:right;font-family:"Zilla Slab",serif;font-weight:700;font-size:14px;color:var(--ink)}
+.mini{font-size:10px;background:var(--plum);color:#fff;padding:1px 5px;border-radius:4px;font-family:inherit}
+/* 時間軸 */
+.timeline{list-style:none;padding:0;margin:14px 0}
+.ev{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid var(--grid)}
+.ev-d{flex:0 0 96px;font-family:"Zilla Slab",serif;font-weight:700;font-size:13px;color:var(--plum-deep)}
+.ev-t{font-size:14px}
+.ev.key .ev-d{color:var(--plum);}
+.ev.key .ev-t{font-weight:500}
+.ev.warn{background:#fbeaea;border-radius:6px;padding:9px 12px}
+.ev.warn .ev-d,.ev.warn .ev-t{color:var(--neg);font-weight:700}
+.ev.talk .ev-t{color:var(--ink2)}
 
 @media(max-width:620px){
   .dash{grid-template-columns:1fr}
@@ -180,7 +203,7 @@ footer .ver{font-family:"Zilla Slab",serif;font-weight:700;color:var(--plum-deep
 
 <nav class="stepnav" id="nav">
   <a class="pad active" data-target="step1"><span class="n">1</span>現金流六大規則</a>
-  <a class="pad locked"><span class="n">2</span>基本資訊查詢</a>
+  <a class="pad" data-target="step2"><span class="n">2</span>基本資訊查詢</a>
   <a class="pad locked"><span class="n">3</span>法說會討論</a>
   <a class="pad locked"><span class="n">4</span>營收趨勢</a>
   <a class="pad locked"><span class="n">5</span>前瞻本益比</a>
@@ -580,17 +603,111 @@ footer .ver{font-family:"Zilla Slab",serif;font-weight:700;color:var(--plum-deep
     盲測階段刻意未查詢股價／EPS／產業地位／新聞題材。
   </div>
 
-  <!-- 未完成步驟預覽 -->
-  <div class="future">
-    <span class="step-tag">第 2–6 步 · 待進行</span>
-    <p>第 2 步起將查詢基本資訊（股價、EPS、殖利率、營收、法說會連結，附實際來源），
-    並依序完成營收趨勢視覺化、前瞻本益比／EPS 估值。第 6 步投資決策僅在你主動詢問時才做。
-    上方導覽選單的灰階項目會在對應步驟完成後解鎖。</p>
+</section>
+
+<section id="step2">
+  <div class="step-head"><span class="step-tag">第 2 步 / 共 6 步</span></div>
+  <h2>基本資訊查詢</h2>
+
+  <div class="callout">
+    <div class="kh">重點提示</div>
+    <p><span class="negv">⚠ 分割事件：</span>寶雅已通過 <b>1拆10（面額 10→1 元）</b>，
+    <b>8/10 新股上櫃</b>，屆時股價／EPS／每股淨值全部 <b>÷10</b>。
+    以下歷史每股數字<b>皆為分割前舊基準</b>，比較時已維持同一基準、不失真。</p>
+    <p><span class="negv">⚠ 今日無即時報價：</span>舊股 <b>7/30–8/7 停止交易</b>（今天 8/3 在區間內），
+    最近可得為 <b>7/14 約 677 元</b>（舊基準快照，非即時）。</p>
+    <p><span class="posv">✔ 基本面：</span>2025 EPS <b>29.54 元</b>（賺近 3 個股本）、
+    2026 H1 EPS <b>17.45 元</b>、月營收年增持續為正，成長動能延續。</p>
+  </div>
+
+  <h3 class="sub">股價快照（舊股基準 · 面額 10 元）</h3>
+  <p class="cap">即時報價會隨盤中跳動、<b>不是區間</b>。下列為不同時間點的<b>單一快照</b>，非官方公布之區間；
+  正式交易請以你的券商 App 為準。今日 8/3 因換股停止交易，無當日報價。</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>快照時間</th><th>收盤(元)</th><th>本益比</th><th>來源</th></tr></thead>
+    <tbody><tr><td class="yr">2026/01/12</td><td>440.0</td><td>15.87</td><td style="text-align:left"><a href="https://tw.stock.yahoo.com/quote/5904.TWO/revenue" target="_blank" rel="noopener">Yahoo股市</a></td></tr>
+<tr><td class="yr">2026/05/18</td><td>536.0</td><td>—</td><td style="text-align:left"><a href="https://stock.wearn.com/a5904.html" target="_blank" rel="noopener">聚財網</a></td></tr>
+<tr><td class="yr">2026/05/22</td><td>568.0</td><td>18.06</td><td style="text-align:left"><a href="https://tw.stock.yahoo.com/quote/5904.TWO" target="_blank" rel="noopener">Yahoo股市</a></td></tr>
+<tr><td class="yr">2026/06/12</td><td>664.0</td><td>—</td><td style="text-align:left"><a href="https://goodinfo.tw/tw/StockDetail.asp?STOCK_ID=5904" target="_blank" rel="noopener">鉅亨〈焦點股〉</a></td></tr>
+<tr><td class="yr">2026/07/14</td><td>677.0</td><td>20.86</td><td style="text-align:left"><a href="https://www.wantgoo.com/stock/5904/dividend-policy/ex-dividend" target="_blank" rel="noopener">玩股網</a></td></tr>
+</tbody>
+  </table></div>
+  <p class="cap">2026 年股價由 1 月約 440 元一路走高至 7 月約 677 元（舊基準）；7/16 已除息 25.5 元。
+  換算分割後（÷10）約當 <b>67~68 元</b>區間。</p>
+
+  <h3 class="sub">歷年 EPS 趨勢（舊基準，元）</h3>
+  <div class="chartbox hbars"><div class="hbar"><span class="hb-y">2020</span><span class="hb-t"><span class="hb-f" style="width:73.1%"></span></span><span class="hb-v">21.60</span></div>
+<div class="hbar"><span class="hb-y">2021</span><span class="hb-t"><span class="hb-f" style="width:61.8%"></span></span><span class="hb-v">18.25</span></div>
+<div class="hbar"><span class="hb-y">2022</span><span class="hb-t"><span class="hb-f" style="width:68.6%"></span></span><span class="hb-v">20.26</span></div>
+<div class="hbar"><span class="hb-y">2023</span><span class="hb-t"><span class="hb-f" style="width:82.6%"></span></span><span class="hb-v">24.41</span></div>
+<div class="hbar"><span class="hb-y">2024</span><span class="hb-t"><span class="hb-f" style="width:90.5%"></span></span><span class="hb-v">26.74</span></div>
+<div class="hbar"><span class="hb-y">2025</span><span class="hb-t"><span class="hb-f" style="width:100.0%"></span></span><span class="hb-v">29.54</span></div>
+<div class="hbar"><span class="hb-y">26H1 <span class="mini">H1累計</span></span><span class="hb-t"><span class="hb-f partial" style="width:59.1%"></span></span><span class="hb-v">17.45</span></div>
+</div>
+  <p class="cap">EPS 連續走高：2021 谷底 18.25 → 2025 新高 29.54；26H1 累計 17.45 元（半年，非全年）。
+  資料同第一步 Goodinfo 來源。</p>
+
+  <h3 class="sub">營收與獲利（合併，億元 · 舊基準 EPS）</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>期間</th><th>營收</th><th>營收YoY</th><th>稅後淨利</th><th>淨利YoY</th><th>EPS</th></tr></thead>
+    <tbody><tr><td class="yr">2025 全年</td><td>253.2</td><td class="pos">+7.2%</td><td>31.43</td><td class="pos">+12.1%</td><td>29.54</td></tr>
+<tr><td class="yr">2026 Q1</td><td>70.95</td><td class="pos">+12.7%</td><td>9.90</td><td class="pos">+26.2%</td><td>9.30</td></tr>
+<tr><td class="yr">2026 H1</td><td>140.27</td><td class="pos">+13.67%</td><td>18.58</td><td class="pos">—</td><td>17.45</td></tr>
+</tbody>
+  </table></div>
+  <p class="cap">
+    2026/6 單月營收 <b>22.46 億</b>（YoY <span class="posv">+8.35%</span>、MoM −7.92%，為 2025/12 以來單月新低）；
+    1–6 月累計 <b>140.27 億</b>（YoY <span class="posv">+13.67%</span>）。詳細月營收走勢留待第 4 步視覺化。</p>
+
+  <h3 class="sub">股利與殖利率</h3>
+  <p style="font-size:14.5px">2025 年度配發 <b>現金股利 25.5 元</b>（舊基準，創新高），除息日 <b>2026/07/16</b>。
+  殖利率隨股價變動：以董事會日 458 元計約 <b>5.6%</b>；以除息前約 717 元計約 <b>3.56%</b>——
+  <span class="cap" style="display:inline">兩者是不同股價下的快照，非固定值。</span></p>
+
+  <h3 class="sub">法人獲利預估（供第 5 步估值用，先揭露）</h3>
+  <p style="font-size:14.5px">CMoney 統計法人平均預估 2026 全年稅後純益約 <b>36.09 億</b>、
+  EPS 區間 <b>31.83~36 元</b>（舊基準）。
+  另有鉅亨引 Factset 顯示 EPS 預估 24.38 元、目標價 630 元——
+  <span class="negv">此數字與 H1 已達 17.45 元的進度明顯矛盾</span>，可能是舊估值或基準不一致，
+  <b>第 5 步會重新查證，暫不採用。</b></p>
+
+  <h3 class="sub">重大事件時間軸（2026）</h3>
+  <ul class="timeline"><li class="ev key"><span class="ev-d">02/23</span><span class="ev-t">董事會通過 2025 全年財報；宣布 1拆10 分割 + 配息 25.5 元（均創新高）</span></li>
+<li class="ev "><span class="ev-d">04/27</span><span class="ev-t">董事會通過 2026 Q1 財報（EPS 9.3 元，單季新高）</span></li>
+<li class="ev "><span class="ev-d">05/19</span><span class="ev-t">股東常會通過配息 25.5 元、全面改選董事</span></li>
+<li class="ev talk"><span class="ev-d">06/02</span><span class="ev-t">受邀花旗證券「Citi 2026 Taiwan Conference」說明營運概況</span></li>
+<li class="ev key"><span class="ev-d">06/09</span><span class="ev-t">每股面額變更（10→1 元）登記完成</span></li>
+<li class="ev "><span class="ev-d">07/16</span><span class="ev-t">除息 25.5 元</span></li>
+<li class="ev "><span class="ev-d">07/27</span><span class="ev-t">董事會通過 2026 Q2 財報（H1 EPS 17.45 元）</span></li>
+<li class="ev key"><span class="ev-d">07/29</span><span class="ev-t">舊股最後交易日</span></li>
+<li class="ev warn"><span class="ev-d">07/30–08/07</span><span class="ev-t">舊股停止交易（含今日 8/3，無即時報價）</span></li>
+<li class="ev key"><span class="ev-d">08/10</span><span class="ev-t">新股上櫃恢復交易，股價參考價 = 原收盤 × 1/10</span></li>
+</ul>
+  <p class="cap"><b>法說會說明：</b>寶雅本次無附簡報 PDF 的獨立法說會，營運說明主要透過
+    <b>董事會財報公告</b>與 <b>6/2 花旗 Citi 2026 Taiwan Conference</b>。第 3 步將據此開放討論方向。</p>
+
+  <div class="src">
+    <b>資料來源（第 2 步為本次網路查詢所得，附實際連結）：</b><br>
+    • 分割時程／營收官方公告：<a href="https://tw.finance.yahoo.com/quote/5904/announcement" target="_blank" rel="noopener">Yahoo 個股公告（引 MOPS 重訊）</a>、
+    <a href="https://finance.biggo.com.tw/news/twse_major_5904_1150702_165606" target="_blank" rel="noopener">BigGo 財經重訊</a><br>
+    • 2025 財報／配息／分割宣布：<a href="https://www.sinotrade.com.tw/richclub/hotstock/%E5%AF%B6%E9%9B%85-5904-EPS%E9%80%A3%E4%B8%89%E5%B9%B4%E5%89%B5%E9%AB%98-%E5%AE%A3%E4%BD%88%E9%85%8D%E6%81%AF5-6--%E4%B8%A6%E6%8B%8D%E6%9D%BF%E8%82%A1%E7%A5%A81%E6%8B%8610-%E8%82%A1%E5%B8%82%E8%A9%B1%E9%A1%8C-699d36f184092b4b9eb40dc7" target="_blank" rel="noopener">永豐金證券 豐雲學堂</a><br>
+    • Q1 財報：<a href="https://cmnews.com.tw/article/newsyoudeservetoknow-6489143e-4287-11f1-866a-28508a760633" target="_blank" rel="noopener">CMoney 即時新聞</a><br>
+    • H1 財報／換股時程：<a href="https://tw.news.yahoo.com/%E5%AF%B6%E9%9B%85-5904-%E8%B6%85%E5%BC%B7%E8%B2%A1%E5%A0%B1-%E6%98%8E%E6%9C%80%E5%BE%8C%E4%BA%A4%E6%98%93%E6%97%A5-%E6%96%B0%E8%82%A18-125200411.html" target="_blank" rel="noopener">FTNN／Yahoo 新聞</a><br>
+    • 6 月營收／法人預估：<a href="https://www.cmoney.tw/notes/note-detail.aspx?nid=1232789" target="_blank" rel="noopener">CMoney 營收公告</a>、
+    <a href="https://www.nstock.tw/%E5%AF%B6%E9%9B%85%E5%81%9A%E4%BB%80%E9%BA%BC.html" target="_blank" rel="noopener">nStock 小百科</a><br>
+    股價快照來源見上表各列連結。即時報價非本表可保證，請以券商 App 為準。
   </div>
 </section>
 
+<div class="future">
+  <span class="step-tag">第 3–6 步 · 待進行</span>
+  <p>第 3 步：法說會／營運說明深入討論（依你想深入的方向）。第 4 步：月營收趨勢視覺化。
+  第 5 步：前瞻本益比／EPS 估值（會重新查證並訂正法人預估）。第 6 步：投資決策推理（僅你主動詢問才做）。
+  導覽選單灰階項目會在對應步驟完成後解鎖。</p>
+</div>
+
 <footer>
-  <p><span class="ver">寶雅 5904 · 現金流健檢報告 v1.0（第 1 步完成）</span>　生成時間：2026-08-03 00:42</p>
+  <p><span class="ver">寶雅 5904 · 現金流健檢報告 v2.0（第 1–2 步完成）</span>　生成時間：2026-08-03 01:05</p>
   <p>本報告為初步分析框架產物，非投資建議。市場數據以你自己的看盤軟體／券商 App 為準。</p>
 </footer>
 
