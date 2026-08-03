@@ -11,9 +11,6 @@
 > 這條 GitHub Pages 網址會顯示**渲染後的網頁**。
 > 把它加到書籤，打開就是報告清單，點卡片直接看。
 
-### 各報告直達連結
-- 台積電 2330：https://shawnlee0390.github.io/mystock-analysis/2330_tsmc_analysis.html
-
 ## ⚠️ 注意
 
 直接點下方檔案清單裡的 `.html`（github.com 檔案頁）只會顯示 **HTML 原始碼**，
