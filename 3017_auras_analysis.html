@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>奇鋐科技 (3017) 個股初步分析</title>
+<style>
+  :root{
+    --bg:#0B1220;
+    --surface:#131C2E;
+    --surface-2:#1B2740;
+    --text:#E8ECF3;
+    --muted:#8B96AC;
+    --accent:#FF6B4A;
+    --accent-dim:#7A3A2A;
+    --peak:#F0C36D;
+    --trough:#FF6B8A;
+    --pass:#4ADE80;
+    --fail:#F87171;
+    --line:#26324A;
+    --font-display:'Zilla Slab', 'Noto Serif TC', serif;
+    --font-body:'Inter','Noto Sans TC',sans-serif;
+    --font-mono:'JetBrains Mono','Roboto Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.65;
+  }
+  header.hero{
+    padding:56px 8vw 40px;
+    background:
+      linear-gradient(180deg, rgba(255,107,74,0.08), transparent 60%),
+      repeating-linear-gradient(90deg, var(--surface) 0 3px, transparent 3px 26px);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    color:var(--accent);
+    letter-spacing:0.14em;
+    font-size:12.5px;
+    text-transform:uppercase;
+  }
+  h1.title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(32px,5vw,52px);
+    margin:10px 0 6px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{color:var(--muted);font-size:15px;max-width:640px;}
+
+  nav.stepnav{
+    position:sticky; top:0; z-index:50;
+    display:flex; gap:2px; overflow-x:auto;
+    background:rgba(11,18,32,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:0 8vw;
+  }
+  nav.stepnav a{
+    flex:0 0 auto;
+    display:flex; align-items:center; gap:8px;
+    padding:14px 16px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .2s, border-color .2s;
+  }
+  nav.stepnav a .num{
+    width:18px;height:18px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:10px; border:1px solid var(--muted);
+  }
+  nav.stepnav a.active{color:var(--text); border-bottom-color:var(--accent);}
+  nav.stepnav a.active .num{background:var(--accent); border-color:var(--accent); color:#1a0f0a;}
+  nav.stepnav a.locked{opacity:0.38; pointer-events:none;}
+
+  main{padding:0 8vw 100px;}
+  section{padding:52px 0; border-bottom:1px solid var(--line); scroll-margin-top:60px;}
+  section:last-child{border-bottom:none;}
+
+  .step-label{
+    font-family:var(--font-mono); color:var(--accent);
+    font-size:12.5px; letter-spacing:.1em; text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h2.step-title{
+    font-family:var(--font-display); font-size:clamp(22px,3vw,30px);
+    margin:0 0 22px; font-weight:600;
+  }
+
+  .callout{
+    display:flex; gap:14px;
+    border-left:3px solid var(--accent);
+    background:var(--surface);
+    padding:16px 20px;
+    border-radius:0 8px 8px 0;
+    margin-bottom:28px;
+  }
+  .callout b{color:var(--accent);}
+  .callout.warn{border-left-color:var(--fail);}
+  .callout.warn b{color:var(--fail);}
+  .callout.ok{border-left-color:var(--pass);}
+  .callout.ok b{color:var(--pass);}
+
+  table{width:100%; border-collapse:collapse; margin:18px 0 8px; font-size:14px;}
+  th,td{padding:10px 12px; text-align:right; border-bottom:1px solid var(--line);}
+  th:first-child, td:first-child{text-align:left; font-family:var(--font-mono); color:var(--muted);}
+  th{font-family:var(--font-mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; font-weight:500;}
+  td{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  tr.ref td{color:var(--muted); font-style:italic;}
+  .neg{color:var(--trough);}
+  .pos{color:var(--peak);}
+  .note{font-size:13px; color:var(--muted); margin-top:6px;}
+
+  .rule-card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:22px 24px; margin-bottom:20px;}
+  .rule-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:10px;}
+  .rule-head h3{margin:0; font-family:var(--font-display); font-size:18px; font-weight:600;}
+  .score-badge{font-family:var(--font-mono); font-size:13px; padding:3px 10px; border-radius:20px; background:var(--surface-2); white-space:nowrap;}
+  .score-badge.high{color:var(--pass);}
+  .score-badge.mid{color:var(--peak);}
+  .score-badge.low{color:var(--fail);}
+  .persona{display:inline-block; margin-top:8px; font-size:13px; color:var(--accent); font-family:var(--font-mono);}
+
+  .chart-wrap{margin-top:14px;}
+  .chart-wrap svg{width:100%; height:auto; display:block;}
+  .bar-label{font-family:var(--font-mono); font-size:11px; fill:var(--muted);}
+  .val-label{font-family:var(--font-mono); font-size:11px; fill:var(--text);}
+
+  .score-summary{
+    display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:26px;
+  }
+  .score-ring{font-family:var(--font-display); font-size:52px; font-weight:600; color:var(--accent);}
+  .score-ring span{font-size:20px; color:var(--muted); font-family:var(--font-body);}
+  .gate-verdict{font-size:15px; max-width:480px;}
+
+  .locked-section{opacity:.45;}
+  .locked-section .step-label{color:var(--muted);}
+
+  footer{padding:30px 8vw; border-top:1px solid var(--line); font-family:var(--font-mono); font-size:12px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">台股個股初步分析 · 現金流優先</div>
+  <h1 class="title">奇鋐科技 3017</h1>
+  <p class="subtitle">六步驟分析框架：先以現金流量表盲測體質，再逐步疊加基本面、法說會、營收趨勢與估值判斷。</p>
+</header>
+
+<nav class="stepnav" id="stepnav">
+  <a href="#step1" class="active"><span class="num">1</span>現金流盲測</a>
+  <a href="#step2"><span class="num">2</span>基本資訊</a>
+  <a href="#step3" class="locked"><span class="num">3</span>法說會</a>
+  <a href="#step4" class="locked"><span class="num">4</span>營收趨勢</a>
+  <a href="#step5" class="locked"><span class="num">5</span>本益比估值</a>
+  <a href="#step6" class="locked"><span class="num">6</span>投資決策</a>
+</nav>
+
+<main>
+
+<section id="step1">
+  <div class="step-label">第 1 步／共 6 步</div>
+  <h2 class="step-title">現金流量表六大規則分析（盲測階段）</h2>
+
+  <div class="callout ok">
+    <div><b>結論先講：</b>六大規則平均約 <b>81 分</b>（良好），未觸發最高警戒訊號，現金流體質可以繼續看下去。唯一需要留意的是「現金流品質」規則（A&gt;D）過關率只有 60%，2021、2024 兩年稅前淨利高於營業現金流。</div>
+  </div>
+
+  <p class="note">📌 本步驟嚴格盲測：僅依據下方 A/B/C/D/E 數字本身判斷，不查詢股價、EPS、產業地位等背景資訊（畫面截圖中雖附有股價與EPS欄位，此步驟一律不採用）。資料來源：<b>使用者提供之財報網站截圖</b>，非本次搜尋所得，數字未另行查證來源網站正確性。</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:32px;">現金流量數據（單位：億元）</h3>
+  <table>
+    <thead>
+      <tr><th>年度</th><th>A 營業活動</th><th>B 投資活動</th><th>C 融資活動</th><th>D 稅前淨利</th><th>E 期末餘額</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2021</td><td>28.4</td><td class="neg">-21.6</td><td class="pos">11.6</td><td>47.7</td><td>129</td></tr>
+      <tr><td>2022</td><td>88.4</td><td class="neg">-41.9</td><td class="pos">20.8</td><td>64.9</td><td>200</td></tr>
+      <tr><td>2023</td><td>103</td><td class="neg">-39.1</td><td class="pos">8.72</td><td>80.3</td><td>270</td></tr>
+      <tr><td>2024</td><td>96.3</td><td class="neg">-76.7</td><td class="pos">2</td><td>124</td><td>299</td></tr>
+      <tr><td>2025</td><td>394</td><td class="neg">-133</td><td class="pos">26.2</td><td>288</td><td>585</td></tr>
+      <tr class="ref"><td>26Q1（單季，僅供參考）</td><td>137</td><td class="neg">-66.7</td><td class="pos">12.1</td><td>120</td><td>679</td></tr>
+    </tbody>
+  </table>
+  <p class="note">D 欄位取「稅前淨利」（畫面中之「稅前淨利」欄）。26Q1 為單一季度數字，僅供趨勢參考，不列入六大規則計分。</p>
+
+  <!-- Rule 1 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則一・A 逐季與逐年成長趨勢</h3>
+      <span class="score-badge high">88 / 100</span>
+    </div>
+    <p>年度營業現金流從 2021 年 28.4 億一路成長到 2025 年 394 億，四年間翻了近 14 倍，年複合成長率約 93%。中間只有 2023→2024 出現小幅回落（103→96.3，約 -6.5%），其餘三個年度皆為兩位數甚至三位數成長，2024→2025 更是爆發式的 +309%。</p>
+    <div class="persona">個性標籤：「加速衝刺」型 — 造血能力不只穩定成長，且成長速度本身還在加快。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="220" x2="620" y2="220" stroke="#26324A" stroke-width="1"/>
+        <!-- 2021 -->
+        <rect x="60" y="206.5" width="60" height="13.5" fill="var(--trough)"/>
+        <text x="90" y="200" class="val-label" text-anchor="middle">28.4</text>
+        <text x="90" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <!-- 2022 -->
+        <rect x="150" y="178" width="60" height="42" fill="#3E5A8A"/>
+        <text x="180" y="171" class="val-label" text-anchor="middle">88.4</text>
+        <text x="180" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <!-- 2023 -->
+        <rect x="240" y="171.1" width="60" height="48.9" fill="#3E5A8A"/>
+        <text x="270" y="164" class="val-label" text-anchor="middle">103</text>
+        <text x="270" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <!-- 2024 -->
+        <rect x="330" y="174.3" width="60" height="45.7" fill="#3E5A8A"/>
+        <text x="360" y="167" class="val-label" text-anchor="middle">96.3</text>
+        <text x="360" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <!-- 2025 peak -->
+        <rect x="420" y="32.8" width="60" height="187.2" fill="var(--peak)"/>
+        <text x="450" y="26" class="val-label" text-anchor="middle" fill="var(--peak)">394</text>
+        <text x="450" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <!-- 26Q1 ref -->
+        <rect x="510" y="154.9" width="60" height="65.1" fill="#2A3550" stroke="#8B96AC" stroke-dasharray="3 3"/>
+        <text x="540" y="148" class="val-label" text-anchor="middle" fill="var(--muted)">137</text>
+        <text x="540" y="238" class="bar-label" text-anchor="middle">26Q1*</text>
+        <text x="330" y="255" class="bar-label" text-anchor="middle" fill="var(--muted)">*單季參考，不列入計分</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Rule 2 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則二・B 投資紀律評估</h3>
+      <span class="score-badge mid">76 / 100</span>
+    </div>
+    <p>投資活動現金流五年皆為負值，且金額逐年放大：21.6 → 41.9 → 39.1 → 76.7 → 133 億，代表持續投入資本支出，尚未有停下腳步的跡象。|B| 占 A 的比重在 34%～80% 間波動（2024 年比重最高達 80%，2025 年因 A 暴增反而降到 34%），沒有出現長期 |B|&gt;A 的失控局面。</p>
+    <div class="persona">個性標籤：「敢衝且有實力」型 — 投資規模持續加碼，但沒有超出造血能力可負擔的範圍。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="40" x2="620" y2="40" stroke="#26324A" stroke-width="1"/>
+        <text x="30" y="44" class="bar-label" text-anchor="end">0</text>
+        <!-- bars extend downward -->
+        <rect x="60" y="40" width="60" height="30.9" fill="var(--trough)"/>
+        <text x="90" y="86" class="val-label" text-anchor="middle">-21.6</text>
+        <text x="90" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <rect x="150" y="40" width="60" height="59.9" fill="#C46A6A"/>
+        <text x="180" y="115" class="val-label" text-anchor="middle">-41.9</text>
+        <text x="180" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <rect x="240" y="40" width="60" height="55.9" fill="#C46A6A"/>
+        <text x="270" y="111" class="val-label" text-anchor="middle">-39.1</text>
+        <text x="270" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <rect x="330" y="40" width="60" height="109.7" fill="#C46A6A"/>
+        <text x="360" y="165" class="val-label" text-anchor="middle">-76.7</text>
+        <text x="360" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <rect x="420" y="40" width="60" height="190" fill="var(--trough)"/>
+        <text x="450" y="245" class="val-label" text-anchor="middle" fill="var(--trough)">-133</text>
+        <text x="450" y="15" class="bar-label" text-anchor="middle">2025</text>
+        <rect x="510" y="40" width="60" height="95.3" fill="#2A3550" stroke="#8B96AC" stroke-dasharray="3 3"/>
+        <text x="540" y="150" class="val-label" text-anchor="middle" fill="var(--muted)">-66.7</text>
+        <text x="540" y="238" class="bar-label" text-anchor="middle">26Q1*</text>
+      </svg>
+    </div>
+    <p class="note">*棒體愈長代表投資支出愈大（向下延伸）；2025 年度數字標示於棒體下方以免超出畫布。</p>
+  </div>
+
+  <!-- Rule 3 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則三・B 投資效益分析（隔年 A 是否轉強）</h3>
+      <span class="score-badge high">82 / 100</span>
+    </div>
+    <table>
+      <thead><tr><th>投資年度</th><th>當年 B</th><th>次年 A</th><th>次年 A 年增</th><th>效益</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td class="neg">-21.6</td><td>88.4（2022）</td><td class="pos">+211%</td><td>強</td></tr>
+        <tr><td>2022</td><td class="neg">-41.9</td><td>103（2023）</td><td class="pos">+16.5%</td><td>中</td></tr>
+        <tr><td>2023</td><td class="neg">-39.1</td><td>96.3（2024）</td><td class="neg">-6.5%</td><td>弱</td></tr>
+        <tr><td>2024</td><td class="neg">-76.7</td><td>394（2025）</td><td class="pos">+309%</td><td>極強</td></tr>
+      </tbody>
+    </table>
+    <p>四個投資年度中有三個在隔年出現明顯的營業現金流成長，僅 2023 年度投資後隔年（2024）小幅走弱。整體來看投資轉化為造血能力的效果相當一致，尤其 2024 年度的重度投資在 2025 年展現爆發性回報。</p>
+    <div class="persona">個性標籤：「投資見效」型 — 大多數年度的加碼都能在一年內看到回報，僅一年效果延後。</div>
+    <p class="note">提醒：此規則僅對照「當年 B → 次年 A」，2025 年度投資的效益需留待未來年度資料驗證，目前無法評分。</p>
+  </div>
+
+  <!-- Rule 4 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則四・C 融資活動合理性</h3>
+      <span class="score-badge high">85 / 100</span>
+    </div>
+    <p>五個年度 B 皆為負值、C 皆為正值，形式上每年都是「投資 + 對外融資」的組合。但檢查最高警戒訊號的精確定義（A 為負，且 C 為正或小幅負）— <b>五年 A 從未轉負</b>，本業造血能力全程健康，因此未觸發最嚴重警訊。C 的絕對金額相對 A 也偏小（2 億～26.2 億，占 A 的比重多在 1%～41% 之間），較像是常規的籌資搭配，而非依賴外部資金度日。</p>
+    <div class="persona">個性標籤：「穩健搭配」型 — 有融資動作，但本業現金流始終是支撐投資的主力。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="150" x2="620" y2="150" stroke="#26324A" stroke-width="1"/>
+        <text x="30" y="154" class="bar-label" text-anchor="end">0</text>
+        <!-- 2021 -->
+        <rect x="55" y="119.1" width="26" height="30.9" fill="var(--trough)"/>
+        <rect x="83" y="133.4" width="26" height="16.6" fill="var(--peak)"/>
+        <text x="94" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <!-- 2022 -->
+        <rect x="145" y="90.1" width="26" height="59.9" fill="#C46A6A"/>
+        <rect x="173" y="120.3" width="26" height="29.7" fill="var(--peak)"/>
+        <text x="184" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <!-- 2023 -->
+        <rect x="235" y="94.1" width="26" height="55.9" fill="#C46A6A"/>
+        <rect x="263" y="137.5" width="26" height="12.5" fill="var(--peak)"/>
+        <text x="274" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <!-- 2024 -->
+        <rect x="325" y="40.3" width="26" height="109.7" fill="#C46A6A"/>
+        <rect x="353" y="147.1" width="26" height="2.9" fill="var(--peak)"/>
+        <text x="364" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <!-- 2025 -->
+        <rect x="415" y="40" width="26" height="110" fill="var(--trough)"/>
+        <rect x="443" y="112.6" width="26" height="37.4" fill="var(--peak)"/>
+        <text x="454" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <text x="560" y="130" class="bar-label" fill="var(--trough)">■ B 投資</text>
+        <text x="560" y="146" class="bar-label" fill="var(--peak)">■ C 融資</text>
+      </svg>
+    </div>
+    <p class="note">2025 年度 B 棒體因數值超出畫布，已等比例壓縮呈現（實際 -133 億）。目前資料未拆解 C 的組成（現金增資／借款／發債等），若日後取得細項，將重新評估各年融資結構的風險排序。</p>
+  </div>
+
+  <!-- Rule 5 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則五・A &gt; D 現金流品質</h3>
+      <span class="score-badge mid">60 / 100</span>
+    </div>
+    <table>
+      <thead><tr><th>年度</th><th>A</th><th>D</th><th>A &gt; D？</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td>28.4</td><td>47.7</td><td class="neg">✗ 不通過</td></tr>
+        <tr><td>2022</td><td>88.4</td><td>64.9</td><td class="pos">✓ 通過</td></tr>
+        <tr><td>2023</td><td>103</td><td>80.3</td><td class="pos">✓ 通過</td></tr>
+        <tr><td>2024</td><td>96.3</td><td>124</td><td class="neg">✗ 不通過</td></tr>
+        <tr><td>2025</td><td>394</td><td>288</td><td class="pos">✓ 通過</td></tr>
+      </tbody>
+    </table>
+    <p>五年中三年通過（60%），落在「需觀察」與「良好」的交界。2021 與 2024 兩個年度稅前淨利高於實際收到的營業現金，代表帳上獲利與實際現金入帳之間存在落差，值得留意是否為應收帳款增加或業外損益干擾所致（此步驟盲測階段暫不深究原因）。</p>
+    <div class="persona">個性標籤：「時好時壞」型 — 多數年度收現品質正常，但兩個年度出現「帳面賺錢、現金沒跟上」的訊號。</div>
+  </div>
+
+  <!-- Rule 6 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則六・E 期末現金餘額穩定性</h3>
+      <span class="score-badge high">93 / 100</span>
+    </div>
+    <p>期末現金餘額五年連續成長，從 2021 年 129 億一路增加到 2025 年 585 億，沒有任何一年出現下滑，26Q1 更續增至 679 億（僅供趨勢參考）。</p>
+    <div class="persona">個性標籤：「穩定累積」型 — 現金水位只增不減，長期趨勢非常健康。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="220" x2="620" y2="220" stroke="#26324A" stroke-width="1"/>
+        <rect x="60" y="183.9" width="60" height="36.1" fill="var(--trough)"/>
+        <text x="90" y="177" class="val-label" text-anchor="middle">129</text>
+        <text x="90" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <rect x="150" y="164" width="60" height="56" fill="#3E5A8A"/>
+        <text x="180" y="157" class="val-label" text-anchor="middle">200</text>
+        <text x="180" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <rect x="240" y="144.4" width="60" height="75.6" fill="#3E5A8A"/>
+        <text x="270" y="137" class="val-label" text-anchor="middle">270</text>
+        <text x="270" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <rect x="330" y="136.3" width="60" height="83.7" fill="#3E5A8A"/>
+        <text x="360" y="129" class="val-label" text-anchor="middle">299</text>
+        <text x="360" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <rect x="420" y="56.2" width="60" height="163.8" fill="var(--peak)"/>
+        <text x="450" y="49" class="val-label" text-anchor="middle" fill="var(--peak)">585</text>
+        <text x="450" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <rect x="510" y="30" width="60" height="190" fill="#2A3550" stroke="#8B96AC" stroke-dasharray="3 3"/>
+        <text x="540" y="23" class="val-label" text-anchor="middle" fill="var(--muted)">679</text>
+        <text x="540" y="238" class="bar-label" text-anchor="middle">26Q1*</text>
+      </svg>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:36px;">總評分與關卡建議</h3>
+  <div class="score-summary">
+    <div class="score-ring">81<span>/ 100</span></div>
+    <div class="gate-verdict">
+      六大規則平均分數約 <b>81%</b（優秀線 ≥80%，落在優秀與良好交界），且未出現「A為負＋B大幅負值＋C正值」的三重疊加最高警戒訊號。
+      <br><br>
+      <b style="color:var(--pass)">→ 現金流體質可以繼續看下去</b>，接下來會進入第 2 步基本資訊查詢。
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:20px;">資料來源備註：本步驟所有數字均為<b>使用者提供之財報截圖</b>，非本次搜尋取得；截圖中另有股價、EPS 等欄位，依現金流盲測規則本步驟未採用，將於第 2 步另行查證。</p>
+</section>
+
+<section id="step2">
+  <div class="step-label">第 2 步／共 6 步</div>
+  <h2 class="step-title">基本資訊查詢</h2>
+
+  <div class="callout">
+    <div><b>重點：</b>奇鋐已從傳統風扇廠轉型為 AI 伺服器液冷散熱龍頭，2026 年營收與獲利連 5 個月維持雙位數甚至三位數年增，Q1 單季 EPS 20.17 元創歷史新高；但本益比隨股價劇烈波動（近三個月落在 36～50 倍區間），估值分歧大，且股利發放僅 21 元（預告值），殖利率偏低，明顯是「成長型」而非「收息型」標的。</div>
+  </div>
+
+  <h3 style="font-family:var(--font-display); font-weight:600;">公司基本資料</h3>
+  <table>
+    <tbody>
+      <tr><td>公司名稱 / 英文簡稱</td><td>奇鋐科技 / AVC（Asia Vital Components）</td></tr>
+      <tr><td>產業類別</td><td>電腦週邊（AI 伺服器液冷 / 氣冷散熱解決方案）</td></tr>
+      <tr><td>掛牌日期</td><td>2002/09/27</td></tr>
+      <tr><td>董事長 / 總經理</td><td>沈慶行</td></tr>
+      <tr><td>股本 / 已發行股數</td><td>39.22 億元 / 392,178,807 股</td></tr>
+      <tr><td>市值（2026/05/08 快照）</td><td>約 9,471 億元</td></tr>
+      <tr><td>公司網站</td><td>https://www.avc.co</td></tr>
+    </tbody>
+  </table>
+  <p class="note">來源：<a href="https://tw.stock.yahoo.com/quote/3017.TW/profile" style="color:var(--accent)">Yahoo股市 個股基本資料</a>（資料時間 2026/05/08）</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:28px;">股價與估值快照（多時間點，非即時報價）</h3>
+  <table>
+    <thead><tr><th>查詢時間點</th><th>收盤價</th><th>漲跌</th><th>本益比（同業平均）</th></tr></thead>
+    <tbody>
+      <tr><td>2026/05/08</td><td>2,445</td><td class="pos">+30（+1.24%）</td><td>49.98（36.52）</td></tr>
+      <tr><td>2026/06 下旬</td><td>2,550</td><td class="pos">+230（+9.91%）</td><td>—</td></tr>
+      <tr><td>2026/07/09</td><td>2,350</td><td class="pos">+25（+1.08%）</td><td>38.61（34.25）</td></tr>
+      <tr><td>2026/07/14</td><td>2,120</td><td class="neg">-105（-4.72%）</td><td>36.56（33.94）</td></tr>
+    </tbody>
+  </table>
+  <p class="note">⚠️ 以上均為「查詢當下」的單一快照，不是同一天的區間，也不是即時報價。可看出 6 月下旬至 7 月中旬股價從高點 2,550 回落至 2,120 附近，波動明顯；正式交易請以看盤軟體／券商 App 即時報價為準。來源：<a href="https://tw.stock.yahoo.com/quote/3017.TW/profile" style="color:var(--accent)">Yahoo股市基本資料</a>、<a href="https://tw.stock.yahoo.com/quote/3017.TW/revenue" style="color:var(--accent)">Yahoo股市營收表</a> 頁面各次抓取結果。</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:28px;">EPS 與獲利能力</h3>
+  <table>
+    <thead><tr><th>期間</th><th>EPS（元）</th></tr></thead>
+    <tbody>
+      <tr><td>2022</td><td>11.78</td></tr>
+      <tr><td>2023</td><td>14.11</td></tr>
+      <tr><td>2024</td><td>21.21</td></tr>
+      <tr><td>2025</td><td class="pos">49.17</td></tr>
+      <tr><td>2025 Q1／Q2／Q3／Q4</td><td>8.28／10.30／13.67／17.01</td></tr>
+      <tr class="ref"><td>2026 Q1（單季，法說會揭露）</td><td class="pos">20.17（歷史新高）</td></tr>
+    </tbody>
+  </table>
+  <p class="note">此處歷年 EPS 與使用者第 1 步提供之截圖數字完全吻合，交叉驗證一致。2025 Q4 每股淨值 113.73 元、營業毛利率 26.39%、股東權益報酬率 17.28%（來源同上）。</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:28px;">殖利率</h3>
+  <p>2025 年度現金股利 <b>21.00 元（預告，尚未正式決議發放）</b>。以 2026/07/14 收盤 2,120 元估算，殖利率約 <b>0.99%</b>，屬偏低水準——符合公司目前資本支出擴張、保留獲利再投資液冷產能的成長型態勢，而非高股息標的。</p>
+  <p class="note">來源：<a href="https://tw.stock.yahoo.com/quote/3017.TW/profile" style="color:var(--accent)">Yahoo股市基本資料</a>「配股資訊」欄位。</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:28px;">近期月營收（2026年）</h3>
+  <table>
+    <thead><tr><th>月份</th><th>單月營收（億元）</th><th>年增率</th></tr></thead>
+    <tbody>
+      <tr><td>2026/01</td><td>170.03</td><td class="pos">+150.01%</td></tr>
+      <tr><td>2026/02</td><td>140.17</td><td class="pos">+74.74%</td></tr>
+      <tr><td>2026/03</td><td>180.17</td><td class="pos">+111.72%</td></tr>
+      <tr><td>2026/04</td><td>156.31</td><td class="pos">+71.62%</td></tr>
+      <tr><td>2026/05</td><td>158.71</td><td class="pos">+60.64%</td></tr>
+      <tr><td>2026/06</td><td>176.18</td><td class="pos">+66.11%</td></tr>
+    </tbody>
+  </table>
+  <p>連续 6 個月營收年增率都在 60% 以上，最高單月（1 月）甚至年增 150%，與現金流量表第 1 步觀察到的 2025 年營業現金流暴增（+309%）方向一致，互相印證營收成長並非帳面數字。</p>
+  <p class="note">來源：<a href="https://tw.stock.yahoo.com/quote/3017.TW/revenue" style="color:var(--accent)">Yahoo股市 營收表</a>（單月合併營收，仟元換算為億元）</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:28px;">法說會日期與重點</h3>
+  <p>最新一場、內容最完整的法說會為 <b>2026/05/14（2026 年第一季法說會）</b>：</p>
+  <ul>
+    <li>Q1 合併營收 490.38 億元，年增 110%，創單季新高；毛利率約 29.8%；單季 EPS 20.17 元創新高</li>
+    <li>從氣冷（3D VC）向水冷技術結構性轉型，帶動 ASP 與產品組合改善</li>
+    <li>伺服器相關營收占比達 66.4%，主要客戶為 NVIDIA 與全球雲端服務供應商（CSP）</li>
+    <li>液冷模組月產能規劃於 2026 年下半年擴增至每月 100 萬組（約現有產能 5 倍）</li>
+    <li>存貨周轉天數由去年同期 194 天降至 132 天，顯示客戶拉貨速度加快</li>
+  </ul>
+  <p class="note">來源：<a href="https://vocus.cc/article/6a059e97fd89780001228e2f" style="color:var(--accent)">法說會個人筆記（vocus）</a>、<a href="https://www.sinotrade.com.tw/richclub/hotstock/%E5%A5%87%E9%8B%90-3017-%E5%81%9A%E4%BB%80%E9%BA%BC-%E6%B3%95%E8%AA%AA%E6%9C%89%E4%BD%95%E9%87%8D%E9%BB%9E-%E9%A6%96%E5%AD%A3EPS%E5%89%B5%E6%AD%B7%E5%8F%B2%E6%96%B0%E9%AB%98%E9%81%9420-17%E5%85%83-%E6%95%A3%E7%86%B1%E9%9C%80%E6%B1%82%E7%88%86%E7%99%BC%E6%8E%A8%E5%8D%87%E5%85%A8%E5%B9%B4%E5%B1%95%E6%9C%9B%E6%A8%82%E8%A7%80-%E8%82%A1%E5%B8%82%E8%A9%B1%E9%A1%8C-6a059014998cb6188cb1bdb7" style="color:var(--accent)">豐雲學堂</a> 對 5/14 法說會內容之整理，非官方逐字稿。另有一場 2026/03/11 法說會涵蓋 2025 全年（Q4）財報，全年營收 1,396 億元、EPS 49.2 元，來源：<a href="https://finance.biggo.com.tw/quote/3017.TW/earnings-call/TW_3017.TW_2026-03-11" style="color:var(--accent)">biggo財經</a>。截至查詢當下，尚未查到對應 2026 Q2（4-6月）財報之法說會公告，若你需要，可改用官網投資人關係專區或 MOPS 逐項確認。</p>
+</section>
+
+<section id="step3" class="locked-section">
+  <div class="step-label">第 3 步／共 6 步</div>
+  <h2 class="step-title">法說會資料深入討論（待進行）</h2>
+</section>
+
+<section id="step4" class="locked-section">
+  <div class="step-label">第 4 步／共 6 步</div>
+  <h2 class="step-title">營收趨勢視覺化（待進行）</h2>
+</section>
+
+<section id="step5" class="locked-section">
+  <div class="step-label">第 5 步／共 6 步</div>
+  <h2 class="step-title">前瞻本益比／EPS 預估（待進行）</h2>
+</section>
+
+<section id="step6" class="locked-section">
+  <div class="step-label">第 6 步／共 6 步</div>
+  <h2 class="step-title">投資決策推理（僅使用者主動詢問時進行）</h2>
+</section>
+
+</main>
+
+<footer>
+  <span>奇鋐科技 3017 · 個股初步分析報告 v0.2（第 1-2 步完成）</span>
+  <span id="gen-time"></span>
+</footer>
+
+<script>
+  document.getElementById('gen-time').textContent = '生成時間：' + new Date().toLocaleString('zh-TW', {hour12:false});
+
+  const links = document.querySelectorAll('.stepnav a:not(.locked)');
+  const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
+
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+  sections.forEach(s => { if (s) observer.observe(s); });
+</script>
+
+</body>
+</html>
