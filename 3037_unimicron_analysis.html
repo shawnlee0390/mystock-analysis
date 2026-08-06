@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>欣興電子 (3037) 個股初步分析</title>
+<style>
+  :root{
+    --bg:#0B1220;
+    --surface:#131C2E;
+    --surface-2:#1B2740;
+    --text:#E8ECF3;
+    --muted:#8B96AC;
+    --accent:#FF6B4A;
+    --accent-dim:#7A3A2A;
+    --peak:#F0C36D;
+    --trough:#FF6B8A;
+    --pass:#4ADE80;
+    --fail:#F87171;
+    --line:#26324A;
+    --font-display:'Zilla Slab', 'Noto Serif TC', serif;
+    --font-body:'Inter','Noto Sans TC',sans-serif;
+    --font-mono:'JetBrains Mono','Roboto Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.65;
+  }
+  header.hero{
+    padding:56px 8vw 40px;
+    background:
+      linear-gradient(180deg, rgba(255,107,74,0.08), transparent 60%),
+      repeating-linear-gradient(90deg, var(--surface) 0 3px, transparent 3px 26px);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    color:var(--accent);
+    letter-spacing:0.14em;
+    font-size:12.5px;
+    text-transform:uppercase;
+  }
+  h1.title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(32px,5vw,52px);
+    margin:10px 0 6px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{color:var(--muted);font-size:15px;max-width:640px;}
+
+  nav.stepnav{
+    position:sticky; top:0; z-index:50;
+    display:flex; gap:2px; overflow-x:auto;
+    background:rgba(11,18,32,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:0 8vw;
+  }
+  nav.stepnav a{
+    flex:0 0 auto;
+    display:flex; align-items:center; gap:8px;
+    padding:14px 16px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .2s, border-color .2s;
+  }
+  nav.stepnav a .num{
+    width:18px;height:18px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:10px; border:1px solid var(--muted);
+  }
+  nav.stepnav a.active{color:var(--text); border-bottom-color:var(--accent);}
+  nav.stepnav a.active .num{background:var(--accent); border-color:var(--accent); color:#1a0f0a;}
+  nav.stepnav a.locked{opacity:0.38; pointer-events:none;}
+
+  main{padding:0 8vw 100px;}
+  section{padding:52px 0; border-bottom:1px solid var(--line); scroll-margin-top:60px;}
+  section:last-child{border-bottom:none;}
+
+  .step-label{
+    font-family:var(--font-mono); color:var(--accent);
+    font-size:12.5px; letter-spacing:.1em; text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h2.step-title{
+    font-family:var(--font-display); font-size:clamp(22px,3vw,30px);
+    margin:0 0 22px; font-weight:600;
+  }
+
+  .callout{
+    display:flex; gap:14px;
+    border-left:3px solid var(--accent);
+    background:var(--surface);
+    padding:16px 20px;
+    border-radius:0 8px 8px 0;
+    margin-bottom:28px;
+  }
+  .callout b{color:var(--accent);}
+  .callout.warn{border-left-color:var(--fail);}
+  .callout.warn b{color:var(--fail);}
+  .callout.ok{border-left-color:var(--pass);}
+  .callout.ok b{color:var(--pass);}
+
+  table{width:100%; border-collapse:collapse; margin:18px 0 8px; font-size:14px;}
+  th,td{padding:10px 12px; text-align:right; border-bottom:1px solid var(--line);}
+  th:first-child, td:first-child{text-align:left; font-family:var(--font-mono); color:var(--muted);}
+  th{font-family:var(--font-mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; font-weight:500;}
+  td{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  tr.ref td{color:var(--muted); font-style:italic;}
+  .neg{color:var(--trough);}
+  .pos{color:var(--peak);}
+  .note{font-size:13px; color:var(--muted); margin-top:6px;}
+
+  .rule-card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:22px 24px; margin-bottom:20px;}
+  .rule-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:10px;}
+  .rule-head h3{margin:0; font-family:var(--font-display); font-size:18px; font-weight:600;}
+  .score-badge{font-family:var(--font-mono); font-size:13px; padding:3px 10px; border-radius:20px; background:var(--surface-2); white-space:nowrap;}
+  .score-badge.high{color:var(--pass);}
+  .score-badge.mid{color:var(--peak);}
+  .score-badge.low{color:var(--fail);}
+  .persona{display:inline-block; margin-top:8px; font-size:13px; color:var(--accent); font-family:var(--font-mono);}
+
+  .chart-wrap{margin-top:14px;}
+  .chart-wrap svg{width:100%; height:auto; display:block;}
+  .bar-label{font-family:var(--font-mono); font-size:11px; fill:var(--muted);}
+  .val-label{font-family:var(--font-mono); font-size:11px; fill:var(--text);}
+
+  .score-summary{
+    display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:26px;
+  }
+  .score-ring{font-family:var(--font-display); font-size:52px; font-weight:600; color:var(--peak);}
+  .score-ring span{font-size:20px; color:var(--muted); font-family:var(--font-body);}
+  .gate-verdict{font-size:15px; max-width:520px;}
+
+  .locked-section{opacity:.45;}
+  .locked-section .step-label{color:var(--muted);}
+
+  footer{padding:30px 8vw; border-top:1px solid var(--line); font-family:var(--font-mono); font-size:12px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">台股個股初步分析 · 現金流優先</div>
+  <h1 class="title">欣興電子 3037</h1>
+  <p class="subtitle">六步驟分析框架：先以現金流量表盲測體質，再逐步疊加基本面、法說會、營收趨勢與估值判斷。</p>
+</header>
+
+<nav class="stepnav" id="stepnav">
+  <a href="#step1" class="active"><span class="num">1</span>現金流盲測</a>
+  <a href="#step2" class="locked"><span class="num">2</span>基本資訊</a>
+  <a href="#step3" class="locked"><span class="num">3</span>法說會</a>
+  <a href="#step4" class="locked"><span class="num">4</span>營收趨勢</a>
+  <a href="#step5" class="locked"><span class="num">5</span>本益比估值</a>
+  <a href="#step6" class="locked"><span class="num">6</span>投資決策</a>
+</nav>
+
+<main>
+
+<section id="step1">
+  <div class="step-label">第 1 步／共 6 步</div>
+  <h2 class="step-title">現金流量表六大規則分析（盲測階段）</h2>
+
+  <div class="callout warn">
+    <div><b>結論先講：</b>六大規則平均約 <b>59 分</b>，落在「需觀察」區間（&lt;60%）。雖然沒有觸發「A為負＋B大幅負值＋C正值」的最高警戒訊號（本業現金流五年皆為正），但 2024、2025 兩年出現「投資支出（B）已經超過本業現金流（A）」且「融資活動（C）由淨還款轉為明顯淨借入」的疊加現象，屬於需要留意的體質變化。<b>依規則建議：先不繼續深入，除非你仍想往下看基本面。</b></div>
+  </div>
+
+  <p class="note">📌 本步驟嚴格盲測：僅依據下方 A/B/C/D/E 數字本身判斷，不查詢股價、EPS、產業地位等背景資訊（截圖中雖附有股價與EPS欄位，此步驟一律不採用）。資料來源：<b>使用者提供之財報網站截圖</b>，非本次搜尋所得，數字未另行查證來源網站正確性。D 欄位取「稅前淨利」。</p>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:32px;">現金流量數據（單位：億元）</h3>
+  <table>
+    <thead>
+      <tr><th>年度</th><th>A 營業活動</th><th>B 投資活動</th><th>C 融資活動</th><th>D 稅前淨利</th><th>E 期末餘額</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2021</td><td>430</td><td class="neg">-245</td><td class="neg">-39.8</td><td>166</td><td>394</td></tr>
+      <tr><td>2022</td><td>611</td><td class="neg">-334</td><td class="neg">-48.3</td><td>399</td><td>615</td></tr>
+      <tr><td>2023</td><td>309</td><td class="neg">-211</td><td class="neg">-181</td><td>156</td><td>529</td></tr>
+      <tr><td>2024</td><td>103</td><td class="neg">-292</td><td class="pos">+83.4</td><td>73.2</td><td>438</td></tr>
+      <tr><td>2025</td><td>150</td><td class="neg">-230</td><td class="pos">+191</td><td>88.3</td><td>549</td></tr>
+      <tr class="ref"><td>26Q2（單季，僅供參考）</td><td>133</td><td class="neg">-51.8</td><td class="pos">+297</td><td>219</td><td>940</td></tr>
+    </tbody>
+  </table>
+  <p class="note">26Q2 為單一季度數字，僅供趨勢參考，不列入六大規則計分。截圖中另有「其他活動」欄位，非本規則使用的 A-E 五項欄位，此步驟不採用。</p>
+
+  <!-- Rule 1 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則一・A 逐季與逐年成長趨勢</h3>
+      <span class="score-badge low">48 / 100</span>
+    </div>
+    <p>年度營業現金流呈現「先衝高再明顯回落」的走勢：2021 年 430 億 → 2022 年 611 億（+42%，五年高點）→ 2023 年 309 億（-49%）→ 2024 年 103 億（-67%，五年低點）→ 2025 年 150 億（+46%，小幅回升但仍不到 2022 年高點的四分之一）。26Q2 單季 133 億已接近 2025 全年的九成，若這個力道能延續，2026 全年有機會明顯優於 2025，但目前僅一季資料，尚不能確認是否只是單季波動。</p>
+    <div class="persona">個性標籤：「潮起潮落」型 — 曾經衝到高點，但近兩年造血能力明顯縮水，2026 首季雖有回溫跡象，仍需更多季度驗證是否真的止跌回升。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="220" x2="620" y2="220" stroke="#26324A" stroke-width="1"/>
+        <rect x="60" y="86.4" width="60" height="133.6" fill="#3E5A8A"/>
+        <text x="90" y="80" class="val-label" text-anchor="middle">430</text>
+        <text x="90" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <rect x="150" y="30" width="60" height="190" fill="var(--peak)"/>
+        <text x="180" y="23" class="val-label" text-anchor="middle" fill="var(--peak)">611</text>
+        <text x="180" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <rect x="240" y="123.9" width="60" height="96.1" fill="#3E5A8A"/>
+        <text x="270" y="117" class="val-label" text-anchor="middle">309</text>
+        <text x="270" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <rect x="330" y="188" width="60" height="32" fill="var(--trough)"/>
+        <text x="360" y="181" class="val-label" text-anchor="middle" fill="var(--trough)">103</text>
+        <text x="360" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <rect x="420" y="173.4" width="60" height="46.6" fill="#3E5A8A"/>
+        <text x="450" y="167" class="val-label" text-anchor="middle">150</text>
+        <text x="450" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <rect x="510" y="178.7" width="60" height="41.3" fill="#2A3550" stroke="#8B96AC" stroke-dasharray="3 3"/>
+        <text x="540" y="172" class="val-label" text-anchor="middle" fill="var(--muted)">133</text>
+        <text x="540" y="238" class="bar-label" text-anchor="middle">26Q2*</text>
+        <text x="330" y="255" class="bar-label" text-anchor="middle" fill="var(--muted)">*單季參考，不列入計分</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Rule 2 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則二・B 投資紀律評估</h3>
+      <span class="score-badge mid">50 / 100</span>
+    </div>
+    <p>投資活動現金流五年皆為負值，持續資本支出屬正常（半導體封裝基板產業本屬資本密集）。但 |B| 占 A 的比重五年分別為 57%、55%、68%、<b>283%</b>、<b>153%</b> — 2024、2025 兩年投資規模已遠遠超過當年本業現金流所能負擔的範圍，不是單一年度的偶發現象，而是連兩年出現的模式，超出「資本密集產業常態」可以合理解釋的區間。</p>
+    <div class="persona">個性標籤：「老將自費特訓」型 — 競爭力不如巔峰時期，仍持續砸重本投資搏一線生機，但近兩年投資規模已超出本業造血能力，成效沒有保證。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="40" x2="620" y2="40" stroke="#26324A" stroke-width="1"/>
+        <text x="30" y="44" class="bar-label" text-anchor="end">0</text>
+        <rect x="60" y="40" width="60" height="132.1" fill="#C46A6A"/>
+        <text x="90" y="185" class="val-label" text-anchor="middle">-245</text>
+        <text x="90" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <rect x="150" y="40" width="60" height="180" fill="var(--trough)"/>
+        <text x="180" y="233" class="val-label" text-anchor="middle" fill="var(--trough)">-334</text>
+        <text x="180" y="15" class="bar-label" text-anchor="middle">2022</text>
+        <rect x="240" y="40" width="60" height="113.7" fill="#C46A6A"/>
+        <text x="270" y="166" class="val-label" text-anchor="middle">-211</text>
+        <text x="270" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <rect x="330" y="40" width="60" height="157.4" fill="var(--trough)"/>
+        <text x="360" y="210" class="val-label" text-anchor="middle" fill="var(--trough)">-292</text>
+        <text x="360" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <rect x="420" y="40" width="60" height="124" fill="#C46A6A"/>
+        <text x="450" y="177" class="val-label" text-anchor="middle">-230</text>
+        <text x="450" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <rect x="510" y="40" width="60" height="27.9" fill="#2A3550" stroke="#8B96AC" stroke-dasharray="3 3"/>
+        <text x="540" y="80" class="val-label" text-anchor="middle" fill="var(--muted)">-51.8</text>
+        <text x="540" y="238" class="bar-label" text-anchor="middle">26Q2*</text>
+      </svg>
+    </div>
+    <p class="note">*棒體愈長代表投資支出愈大（向下延伸）。2024、2025 兩年棒體明顯拉長，對應 |B|/A 比重超過 100% 的警示。</p>
+  </div>
+
+  <!-- Rule 3 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則三・B 投資效益分析（隔年 A 是否轉強）</h3>
+      <span class="score-badge low">40 / 100</span>
+    </div>
+    <table>
+      <thead><tr><th>投資年度</th><th>當年 B</th><th>次年 A</th><th>次年 A 年增</th><th>效益</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td class="neg">-245</td><td>611（2022）</td><td class="pos">+42%</td><td>強</td></tr>
+        <tr><td>2022</td><td class="neg">-334</td><td>309（2023）</td><td class="neg">-49%</td><td>弱</td></tr>
+        <tr><td>2023</td><td class="neg">-211</td><td>103（2024）</td><td class="neg">-67%</td><td>極弱</td></tr>
+        <tr><td>2024</td><td class="neg">-292</td><td>150（2025）</td><td class="pos">+46%</td><td>中（未回到高點）</td></tr>
+      </tbody>
+    </table>
+    <p>四個投資年度中僅 2021 年度的投資在隔年帶來明顯成長；2022、2023 兩年度的重度投資，隔年反而看到 A 大幅衰退，效果不僅沒有隔年發酵，甚至同步惡化。2024 年度投資後 2025 年 A 有回升，但回升幅度（+46%）遠不足以彌補 2023-2024 累積的衰退，也還沒回到 2022 年的高點。整體而言，近三個投資年度中有兩個「砸錢卻沒換到成長」，投資轉化效率明顯不如 2021 年度。</p>
+    <div class="persona">個性標籤：「老將自費特訓」型（延續規則二判斷）— 持續砸錢投資，但近三年僅一次看到明確回報，效果沒有保證，得靠運氣與時機。</div>
+    <p class="note">提醒：此規則僅對照「當年 B → 次年 A」，2025 年度投資的效益需留待未來年度資料驗證，目前無法評分。26Q2 單季 A 回升強勁，但屬單季數字，是否代表 2024-2025 投資已開始發酵，仍待後續完整年度數字確認。</p>
+  </div>
+
+  <!-- Rule 4 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則四・C 融資活動合理性</h3>
+      <span class="score-badge mid">45 / 100</span>
+    </div>
+    <p>檢查最高警戒訊號的精確定義（A 為負，且 C 為正或小幅負）— <b>五年 A 從未轉負</b>，本業造血能力全程健康，因此未觸發最嚴重警訊。但觀察 C 的走勢：2021-2023 年 C 皆為負值（淨還款/發放股利等，-39.8～-181 億），2024、2025 年卻轉為明顯正值（+83.4、+191 億），且轉正的時間點正好與 A 大幅萎縮（309→103→150）、B 持續重度負值同時發生 — 是「本業造血能力下滑後，改用外部資金撐住投資規模」的典型模式轉換，即使還沒踩到最高警戒線，方向上也是往風險升高的方向移動，值得留意是否會持續惡化。26Q2 單季 C 高達 +297 億，遠超單季 A（133 億），若這個借款速度延續，全年 C 有機會超過 2025 全年水準。</p>
+    <div class="persona">個性標籤：「風向轉變」型 — 過去三年靠本業現金流自給自足，近兩年開始明顯倚賴外部資金支撐投資，屬於需要持續追蹤的轉折點，而非立即的最高警訊。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="150" x2="620" y2="150" stroke="#26324A" stroke-width="1"/>
+        <text x="30" y="154" class="bar-label" text-anchor="end">0</text>
+        <rect x="55" y="69.4" width="26" height="80.6" fill="#C46A6A"/>
+        <rect x="83" y="136.9" width="26" height="13.1" fill="var(--trough)"/>
+        <text x="94" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <rect x="145" y="40.1" width="26" height="109.9" fill="#C46A6A"/>
+        <rect x="173" y="134.1" width="26" height="15.9" fill="var(--trough)"/>
+        <text x="184" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <rect x="235" y="80.6" width="26" height="69.4" fill="#C46A6A"/>
+        <rect x="263" y="90.5" width="26" height="59.5" fill="var(--trough)"/>
+        <text x="274" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <rect x="325" y="53.9" width="26" height="96.1" fill="#C46A6A"/>
+        <rect x="353" y="122.6" width="26" height="27.4" fill="var(--peak)"/>
+        <text x="364" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <rect x="415" y="74.3" width="26" height="75.7" fill="#C46A6A"/>
+        <rect x="443" y="87.2" width="26" height="62.8" fill="var(--peak)"/>
+        <text x="454" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <rect x="505" y="133" width="26" height="17" fill="#5A4530" stroke="#8B96AC" stroke-dasharray="2 2"/>
+        <rect x="533" y="52.3" width="26" height="97.7" fill="#7A6530" stroke="#8B96AC" stroke-dasharray="2 2"/>
+        <text x="544" y="238" class="bar-label" text-anchor="middle">26Q2*</text>
+        <text x="560" y="60" class="bar-label" fill="#C46A6A">■ B 投資</text>
+        <text x="560" y="76" class="bar-label" fill="var(--peak)">■ C 融資（正=借入）</text>
+        <text x="560" y="92" class="bar-label" fill="var(--trough)">■ C 融資（負=還款）</text>
+      </svg>
+    </div>
+    <p class="note">長條高度代表金額大小（絕對值），C 的顏色代表方向：金色=淨借入、粉紅=淨還款。26Q2 為單季參考。目前資料未拆解 C 的組成（現金增資／短期借款／發債等），若日後取得細項，將重新評估各年融資結構的風險排序（現金增資風險低於純舉債工具）。</p>
+  </div>
+
+  <!-- Rule 5 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則五・A &gt; D 現金流品質</h3>
+      <span class="score-badge high">100 / 100</span>
+    </div>
+    <table>
+      <thead><tr><th>年度</th><th>A</th><th>D</th><th>A &gt; D？</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td>430</td><td>166</td><td class="pos">✓ 通過</td></tr>
+        <tr><td>2022</td><td>611</td><td>399</td><td class="pos">✓ 通過</td></tr>
+        <tr><td>2023</td><td>309</td><td>156</td><td class="pos">✓ 通過</td></tr>
+        <tr><td>2024</td><td>103</td><td>73.2</td><td class="pos">✓ 通過（差距縮小）</td></tr>
+        <tr><td>2025</td><td>150</td><td>88.3</td><td class="pos">✓ 通過</td></tr>
+      </tbody>
+    </table>
+    <p>五年全數通過（100%），代表每一年實際收到的營業現金都高於帳上稅前淨利，獲利品質扎實，沒有「帳面賺錢、收不到現金」的膨風跡象。值得留意的是 2024 年 A（103）與 D（73.2）的差距明顯縮小到只剩約 30 億，是五年中最接近的一次，雖然仍通過，但收現品質的「安全邊際」比前幾年薄了不少。</p>
+    <div class="persona">個性標籤：「誠實生意」型 — 帳上獲利與實際現金流入方向一致，五年沒有例外，即使獲利規模萎縮，數字本身仍是真實可信的。</div>
+  </div>
+
+  <!-- Rule 6 -->
+  <div class="rule-card">
+    <div class="rule-head">
+      <h3>規則六・E 期末現金餘額穩定性</h3>
+      <span class="score-badge mid">75 / 100</span>
+    </div>
+    <p>期末現金餘額五年走勢為 394 → 615 → 529 → 438 → 549（億元），2022 年攀上高點後連兩年下滑（615→438，累積下滑約 29%），2025 年回升到 549，仍未回到 2022 高點。整體屬於區間波動而非長期單向下滑，長期水位大致維持在 390～615 億的區間內，尚稱穩定，但中段的連續下滑值得留意是否與同期 A 萎縮、B 持續重度投資有關。26Q2 單季暴增至 940 億，可能與同期 C 大幅借入（+297 億）直接相關，屬於資金結構變化而非單純本業現金累積，解讀上不宜直接視為「現金水位健康大幅提升」。</p>
+    <div class="persona">個性標籤：「先蓄後洩再補水」型 — 現金水位有波動但長期落在合理區間，惟近期回升主要靠借款而非本業造血，成色與前段不同。</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="220" x2="620" y2="220" stroke="#26324A" stroke-width="1"/>
+        <rect x="60" y="140.4" width="60" height="79.6" fill="#3E5A8A"/>
+        <text x="90" y="134" class="val-label" text-anchor="middle">394</text>
+        <text x="90" y="238" class="bar-label" text-anchor="middle">2021</text>
+        <rect x="150" y="95.7" width="60" height="124.3" fill="var(--peak)"/>
+        <text x="180" y="89" class="val-label" text-anchor="middle" fill="var(--peak)">615</text>
+        <text x="180" y="238" class="bar-label" text-anchor="middle">2022</text>
+        <rect x="240" y="113.1" width="60" height="106.9" fill="#3E5A8A"/>
+        <text x="270" y="107" class="val-label" text-anchor="middle">529</text>
+        <text x="270" y="238" class="bar-label" text-anchor="middle">2023</text>
+        <rect x="330" y="131.5" width="60" height="88.5" fill="var(--trough)"/>
+        <text x="360" y="125" class="val-label" text-anchor="middle" fill="var(--trough)">438</text>
+        <text x="360" y="238" class="bar-label" text-anchor="middle">2024</text>
+        <rect x="420" y="109" width="60" height="111" fill="#3E5A8A"/>
+        <text x="450" y="103" class="val-label" text-anchor="middle">549</text>
+        <text x="450" y="238" class="bar-label" text-anchor="middle">2025</text>
+        <rect x="510" y="30" width="60" height="190" fill="#2A3550" stroke="#8B96AC" stroke-dasharray="3 3"/>
+        <text x="540" y="23" class="val-label" text-anchor="middle" fill="var(--muted)">940</text>
+        <text x="540" y="238" class="bar-label" text-anchor="middle">26Q2*</text>
+      </svg>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--font-display); font-weight:600; margin-top:36px;">總評分與關卡建議</h3>
+  <div class="score-summary">
+    <div class="score-ring">59<span>/ 100</span></div>
+    <div class="gate-verdict">
+      六大規則平均分數約 <b>59%</b>（需觀察線 &lt;60%），未觸發「A為負＋B大幅負值＋C正值」的三重疊加最高警戒訊號（A 五年皆為正），但規則一、二、三、四四項都指向同一個方向：<b style="color:var(--fail)">近兩年本業造血能力下滑、投資規模超出本業負擔、且開始明顯倚賴外部融資</b>，是體質正在轉弱、但尚未惡化到最嚴重程度的階段。
+      <br><br>
+      <b style="color:var(--peak)">→ 依規則建議先不繼續深入基本面，除非你仍想往下看。</b>若要繼續，建議在第 2 步基本資訊查詢時特別留意：2026 全年 A、C 是否延續 26Q2 的力道（A 強勁回升 vs. C 大幅借入哪個才是主旋律），以及法說會對資本支出／目的地的說明。
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:20px;">資料來源備註：本步驟所有數字均為<b>使用者提供之財報截圖</b>，非本次搜尋取得；截圖中另有股價、EPS 等欄位，依現金流盲測規則本步驟未採用，將於第 2 步另行查證。</p>
+</section>
+
+<section id="step2" class="locked-section">
+  <div class="step-label">第 2 步／共 6 步</div>
+  <h2 class="step-title">基本資訊查詢（待進行）</h2>
+</section>
+
+<section id="step3" class="locked-section">
+  <div class="step-label">第 3 步／共 6 步</div>
+  <h2 class="step-title">法說會資料深入討論（待進行）</h2>
+</section>
+
+<section id="step4" class="locked-section">
+  <div class="step-label">第 4 步／共 6 步</div>
+  <h2 class="step-title">營收趨勢視覺化（待進行）</h2>
+</section>
+
+<section id="step5" class="locked-section">
+  <div class="step-label">第 5 步／共 6 步</div>
+  <h2 class="step-title">前瞻本益比／EPS 預估（待進行）</h2>
+</section>
+
+<section id="step6" class="locked-section">
+  <div class="step-label">第 6 步／共 6 步</div>
+  <h2 class="step-title">投資決策推理（僅使用者主動詢問時進行）</h2>
+</section>
+
+</main>
+
+<footer>
+  <span>欣興電子 3037 · 個股初步分析報告 v0.1（第 1 步完成）</span>
+  <span id="gen-time"></span>
+</footer>
+
+<script>
+  document.getElementById('gen-time').textContent = '生成時間：' + new Date().toLocaleString('zh-TW', {hour12:false});
+
+  const links = document.querySelectorAll('.stepnav a:not(.locked)');
+  const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
+
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+  sections.forEach(s => { if (s) observer.observe(s); });
+</script>
+
+</body>
+</html>
