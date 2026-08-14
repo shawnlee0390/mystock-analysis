@@ -201,6 +201,24 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
   font-family:'JetBrains Mono'; font-size:11.5px; color:#B7AFC2;
   text-align:right; margin-top:28px; padding-top:14px; border-top:1px solid var(--plum-line);
 }
+
+/* 短線操作區塊 (第7-10步) 琥珀色系 */
+#step7, #step8, #step9, #step10{ }
+#step7 .step-tag, #step8 .step-tag, #step9 .step-tag, #step10 .step-tag{ color:var(--amber); }
+#step7 h2, #step8 h2, #step9 h2, #step10 h2{ color:#7A3F0E; }
+#step7 .card h3, #step8 .card h3, #step9 .card h3, #step10 .card h3{ color:#7A3F0E; }
+#step7 .rule-num, #step8 .rule-num, #step9 .rule-num, #step10 .rule-num{ background:var(--amber); }
+#step7 th, #step8 th, #step9 th, #step10 th{ background:var(--amber-tint); color:#7A3F0E; }
+#step7 .callout, #step8 .callout, #step9 .callout, #step10 .callout{ border-left-color:var(--amber); background:var(--amber-tint); }
+#step7 .callout b, #step8 .callout b, #step9 .callout b, #step10 .callout b{ color:#7A3F0E; }
+#step7 .bar.pos, #step8 .bar.pos, #step9 .bar.pos, #step10 .bar.pos{ background:var(--amber); }
+.phase-banner{
+  background:linear-gradient(135deg, var(--amber-tint), #fff);
+  border:1px solid #E8C39A; border-radius:var(--radius);
+  padding:16px 20px; margin-bottom:22px; font-size:14px; color:#7A3F0E;
+  display:flex; align-items:center; gap:12px;
+}
+.phase-banner .icon{ font-size:20px; }
 </style>
 </head>
 <body>
@@ -210,9 +228,9 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
   <h1>群聯電子 Phison Electronics (8299)</h1>
   <p>現金流優先、基本面在後 — 十步驟分析框架。本頁自第一步「現金流量表六大規則盲測」開始，逐步累加。</p>
   <div class="hero-meta">
-    <span>報告版本 v1.5</span>
+    <span>報告版本 v1.6</span>
     <span>建立時間 2026-08-14</span>
-    <span>目前進度：第 6 步／共 10 步</span>
+    <span>目前進度：第 7 步／共 10 步</span>
   </div>
 </header>
 
@@ -223,7 +241,7 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
   <a href="#step4"><span class="num">04</span>營收趨勢</a>
   <a href="#step5"><span class="num">05</span>前瞻本益比</a>
   <a href="#step6"><span class="num">06</span>長期決策</a>
-  <a href="#" class="locked"><span class="num">07</span>技術面</a>
+  <a href="#step7"><span class="num">07</span>技術面</a>
   <a href="#" class="locked"><span class="num">08</span>籌碼面</a>
   <a href="#" class="locked"><span class="num">09</span>消息面</a>
   <a href="#" class="locked"><span class="num">10</span>短線推理</a>
@@ -630,7 +648,57 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
 
   <p class="footnote">以上整合第 1-5 步的分析結果，屬於推理與觀點呈現，不构成正式投資建議；長期持有與否仍應搭配你個人的資金配置、風險承受度與投資期間綜合判斷。</p>
 
-  <div class="version-bar">v1.5 · 2026-08-14 · 第 6 步／共 10 步</div>
+  <div class="version-bar">v1.6 · 2026-08-14 · 第 6 步／共 10 步</div>
+</section>
+
+<section id="step7">
+  <div class="phase-banner">
+    <span class="icon">⚠️</span>
+    <span><b>以下為短線操作分析，判斷維度從「公司值不值得投資」轉為「現在進出場划不划算」。</b>本階段訊號僅反映短期價格與籌碼動態，不代表對公司長期基本面的認同或推翻。</span>
+  </div>
+  <div class="step-tag">【第 7 步／共 10 步：技術面分析】</div>
+  <h2>五個時間週期的技術面判讀（依你提供的 Goodinfo 截圖）</h2>
+
+  <div class="callout">
+    <b>日線呈現「暴跌後 V 型急拉」型態：股價從 5-6 月高點 2,800 元附近，於 7 月下旬急殺至低點 1,445 元（跌幅逾 48%），隨後強力反彈收復至 2,280 元，但日線 KD 已明顯超買（K93.4／D84.0／J112.2），短線波動風險偏高。</b>
+  </div>
+
+  <h3 style="font-family:'Noto Serif TC'; font-size:17px;">五週期資料總覽（依截圖判讀）</h3>
+  <table>
+    <thead><tr><th>週期</th><th>收盤</th><th>區間</th><th>漲跌</th><th>K / D / J</th><th>訊號信心</th></tr></thead>
+    <tbody>
+      <tr><td>日線</td><td>2,280</td><td>2026/08/13</td><td class="posv">+70（+3.17%）</td><td class="negv">93.4 / 84.0 / 112.2</td><td>訊號明確</td></tr>
+      <tr><td>週線</td><td>2,556.34</td><td>2026W22（05/25~05/29，非最新週）</td><td class="posv">+143.95（+5.97%）</td><td>70.1 / 59.5 / 91.4</td><td>訊號傾向但不確定 *</td></tr>
+      <tr><td>月線</td><td>2,280</td><td>2026M08（08/03~08/13，未滿一月）</td><td class="posv">+640（+39.02%）</td><td>65.3 / 69.5 / 56.8</td><td>訊號傾向但不確定 *</td></tr>
+      <tr><td>季線</td><td>2,280</td><td>2026Q3（07/01~08/13，未滿一季）</td><td class="negv">-105（-4.4%）</td><td>74.0 / 70.7 / 80.7</td><td>訊號傾向但不確定 *</td></tr>
+      <tr><td>年線</td><td>—</td><td>2026（未滿一年，圖表數字停留在較舊資料點）</td><td>—</td><td>—</td><td>資料不足無法判斷 *</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">* 週線截圖的資訊面板顯示 2026W22（5月）而非最新一週，年線面板則停留在 2006 年的資料點，推測是截圖當下滑鼠停留位置所致，非圖表實際最新數值；月線與季線因當期（8月、Q3）尚未走完，數字會隨月/季結束前持續變動。以下判讀以「肉眼可見的K棒與均線走勢」為主，數字面板僅供輔助參考。</p>
+
+  <h3 style="font-family:'Noto Serif TC'; font-size:17px;">趨勢方向</h3>
+  <p><b>年線／季線／月線／週線／日線全數呈現多頭排列（股價站上所有均線）</b>，年線圖清楚看到 2025 年、2026 年連續兩根巨量長紅棒，代表這是跨年度級別的主升段；月線圖顯示 2025M06 起加速上攻，近期站上半年線（2039）、年線（1731）、3年線（910）。中期（週線）自 2025W42 起明顯轉陡，目前仍站上所有均線之上。短期（日線）則呈現「主升段後修正、再急速反彈」的鋸齒狀走勢，波動明顯放大。</p>
+
+  <h3 style="font-family:'Noto Serif TC'; font-size:17px;">關鍵價位</h3>
+  <ul style="padding-left:20px;">
+    <li><b>近期支撐</b>：日線 7 月低點 1,445 元（型態失敗的最後防線）；月線月均線（紅線）約 1,862 元為次要支撐</li>
+    <li><b>近期壓力</b>：日線季均線（橘線）約 2,189～2,200 元一帶，股價目前 2,280 元已站上此區，屬「收復失土後測試」；再往上則是 5-6 月高點 2,800 元為前波壓力區</li>
+  </ul>
+
+  <h3 style="font-family:'Noto Serif TC'; font-size:17px;">動能指標狀態</h3>
+  <p><b>日線 KD 明顯超買</b>（K93.4／D84.0，J值破100達112.2），代表短線急拉後動能已相當透支，隨時可能出現高檔震盪或拉回；<b>週線 KD 呈現溫和黃金交叉但尚未過熱</b>（K70.1／D59.5），中期動能仍偏多；<b>月線 KD 則是 K線由下往上，D線微降</b>（K65.3／D69.5），代表月線級別的動能才剛開始回升，長線格局尚未過熱。三個週期呈現「短線過熱、中長線仍有空間」的分歧狀態，需特別留意。</p>
+
+  <h3 style="font-family:'Noto Serif TC'; font-size:17px;">量價關係</h3>
+  <p>日線今日成交量 7,344 張，優於月均量 5,089 張與季均量 6,099 張，<b>價漲量增，屬健康表態</b>；週線、月線、年線的年均量／3年均量／10年均量也都同步呈上升趨勢（▲），顯示這波多頭行情有實際成交量放大支撐，非單純籌碼稀薄下的價格跳動。</p>
+
+  <h3 style="font-family:'Noto Serif TC'; font-size:17px;">可辨識的型態</h3>
+  <p>日線最清楚的型態是<b>「深跌近腰斬後的 V 型反彈」</b>：從高點 2,800 急殺至 1,445（跌幅約 48%），符合第 5-6 步提到的「NAND 循環股波動劇烈」特性；反彈段目前正在測試季均線壓力位置。年線圖上 2025、2026 連續兩根巨量長紅棒，型態上屬於「主升段延續」，但漲幅已相當可觀，需留意日線超買訊號是否轉為短線拉回的前兆。</p>
+
+  <div class="callout warn">
+    <b>與長期分析（第1-6步）呼應：</b>技術面目前的短線過熱訊號，與第 5-6 步提出的「NAND 循環頂點疑慮」方向一致——股價短期已經走出一次接近腰斬的劇烈修正，代表市場對這檔股票的獲利峰值預期本身就存在高度分歧與波動，而非單純穩定向上的成長股。技術面訊號不改變長期基本面的結論，但提醒短線操作者這是一檔高波動的動能股，紀律比信心更重要。
+  </div>
+
+  <div class="version-bar">v1.6 · 2026-08-14 · 第 7 步／共 10 步</div>
 </section>
 </main>
 
