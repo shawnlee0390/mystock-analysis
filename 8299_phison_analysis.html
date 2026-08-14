@@ -210,9 +210,9 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
   <h1>群聯電子 Phison Electronics (8299)</h1>
   <p>現金流優先、基本面在後 — 十步驟分析框架。本頁自第一步「現金流量表六大規則盲測」開始，逐步累加。</p>
   <div class="hero-meta">
-    <span>報告版本 v1.3</span>
+    <span>報告版本 v1.4</span>
     <span>建立時間 2026-08-14</span>
-    <span>目前進度：第 4 步／共 10 步</span>
+    <span>目前進度：第 5 步／共 10 步</span>
   </div>
 </header>
 
@@ -221,7 +221,7 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
   <a href="#step2"><span class="num">02</span>基本資訊</a>
   <a href="#step3"><span class="num">03</span>法說會</a>
   <a href="#step4"><span class="num">04</span>營收趨勢</a>
-  <a href="#" class="locked"><span class="num">05</span>前瞻本益比</a>
+  <a href="#step5"><span class="num">05</span>前瞻本益比</a>
   <a href="#" class="locked"><span class="num">06</span>長期決策</a>
   <a href="#" class="locked"><span class="num">07</span>技術面</a>
   <a href="#" class="locked"><span class="num">08</span>籌碼面</a>
@@ -530,7 +530,63 @@ td:first-child, th:first-child{text-align:left; font-weight:600;}
     <a href="https://tw.stock.yahoo.com/news/%E7%BE%A4%E8%81%AF%E7%87%9F%E6%94%B6%E9%80%A3%E4%B8%83%E6%9C%88%E5%89%B5%E9%AB%98-%E4%B8%8A%E5%8D%8A%E5%B9%B4%E9%A6%96%E7%A0%B4%E5%8D%83%E5%84%84%E5%85%83-001500117.html" target="_blank">MoneyDJ 6月營收報導</a>
   </div>
 
-  <div class="version-bar">v1.3 · 2026-08-14 · 第 4 步／共 10 步</div>
+  <div class="version-bar">v1.4 · 2026-08-14 · 第 4 步／共 10 步</div>
+</section>
+
+<section id="step5">
+  <div class="step-tag">【第 5 步／共 10 步：前瞻本益比／EPS 預估】</div>
+  <h2>估值收尾：便宜的本益比，還是循環頂點的錯覺？</h2>
+
+  <div class="callout warn">
+    <b>以法人共識 2026 年 EPS 中位數計算，目前本益比僅約 6.3～6.6 倍，看似非常便宜；但同一份調查顯示法人預期 2027、2028 年 EPS 將大幅滑落，隱含市場正把 2026 年視為 NAND 價格循環的「獲利頂點」，而非可持續的常態獲利水準。</b>用單一年度的超低本益比判斷「便宜」，在景氣循環股上容易產生價值陷阱的錯覺。
+  </div>
+
+  <h3 style="font-family:'Noto Serif TC'; color:var(--plum-dark); font-size:17px;">FactSet 法人共識預估（2026/08/13，13 位分析師，法說會當日更新）</h3>
+  <table>
+    <thead><tr><th>年度</th><th>EPS 最高</th><th>EPS 最低</th><th>EPS 平均</th><th>EPS 中位數</th></tr></thead>
+    <tbody>
+      <tr class="hl-row"><td>2026 年</td><td class="posv">454.27 元</td><td>213.52 元</td><td>343.04 元</td><td><b>359.86 元</b></td></tr>
+      <tr><td>2027 年</td><td>589.42 元</td><td class="negv">127.58 元</td><td>290.40 元</td><td class="negv">249.84 元（較 2026 中位數 -30.6%）</td></tr>
+      <tr><td>2028 年</td><td>646.88 元</td><td class="negv">55.93 元</td><td>279.88 元</td><td class="negv">136.82 元（較 2026 中位數 -62.0%）</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">2026 年 EPS 預估較前次調查（340.55 元）再度上修，反映 8/13 法說會優於預期的財報效應；但分析師對 2027、2028 年看法分歧極大（2028 年最高 646.88 元、最低僅 55.93 元，相差逾 11 倍），顯示長線獲利能見度低、市場對 NAND 循環何時反轉高度分歧。</p>
+
+  <h3 style="font-family:'Noto Serif TC'; color:var(--plum-dark); font-size:17px;">前瞻本益比試算（以 2026/08/13 收盤價 2,280 元計算）</h3>
+  <table>
+    <thead><tr><th>基準</th><th>EPS 預估</th><th>前瞻本益比</th></tr></thead>
+    <tbody>
+      <tr><td>2026 年（中位數）</td><td>359.86 元</td><td class="posv"><b>6.34 倍</b></td></tr>
+      <tr><td>2026 年（平均值）</td><td>343.04 元</td><td>6.65 倍</td></tr>
+      <tr><td>2027 年（中位數）</td><td>249.84 元</td><td>9.13 倍</td></tr>
+      <tr><td>2028 年（中位數）</td><td>136.82 元</td><td class="negv">16.66 倍</td></tr>
+    </tbody>
+  </table>
+  <p>隨著預估年度拉遠，隱含本益比從 6.3 倍一路墊高到 16.7 倍——這正是典型景氣循環股「用循環高點獲利算出來的本益比看起來便宜」的現象。法人目標價中位數 <b>2,998 元</b>（對照收盤 2,280 元，隱含約 31.5% 上漲空間），是以 2026 年獲利峰值為基礎，若 NAND 價格如管理層自己坦言的「不可能永遠線性攀高」，2027、2028 年獲利下修，目標價也可能同步下修。</p>
+
+  <h3 style="font-family:'Noto Serif TC'; color:var(--plum-dark); font-size:17px;">法人預估上修軌跡（近半年）</h3>
+  <table>
+    <thead><tr><th>調查時間</th><th>2026年EPS中位數</th><th>目標價</th></tr></thead>
+    <tbody>
+      <tr><td>2026/04</td><td>171.59 元</td><td>2,410 元</td></tr>
+      <tr><td>2026/05</td><td>202.4 元</td><td>2,511.5 元</td></tr>
+      <tr><td>2026/06</td><td>317.9 元</td><td>3,000 元</td></tr>
+      <tr><td>2026/07</td><td>340.55 元</td><td>3,000 元</td></tr>
+      <tr class="hl-row"><td>2026/08/13（最新）</td><td><b>359.86 元</b></td><td>2,998 元</td></tr>
+    </tbody>
+  </table>
+  <p>過去半年法人對 2026 年 EPS 預估持續大幅上修（171.59 元→359.86 元，翻倍以上），顯示公司獲利驚喜頻繁出現、法人追趕財報進度的軌跡；但這也代表<b>「便宜」的判斷本身一直在滾動改變</b>，目前的低本益比是建立在近期才確立的高獲利基期上，估值穩定性仍待驗證。</p>
+
+  <div class="source-note">
+    <b>資料來源：</b>
+    <a href="https://news.cnyes.com/news/id/6575155" target="_blank">鉅亨網 FactSet 最新調查 08/13</a>　
+    <a href="https://news.cnyes.com/news/id/6520949" target="_blank">鉅亨網 FactSet 調查 07/02</a>　
+    <a href="https://news.cnyes.com/news/id/6499311" target="_blank">鉅亨網 FactSet 調查 06/15</a>　
+    <a href="https://news.cnyes.com/news/id/6452657" target="_blank">鉅亨網 FactSet 調查 05/11</a>　
+    <a href="https://news.cnyes.com/news/id/6414421" target="_blank">鉅亨網 FactSet 調查 04/09</a>
+  </div>
+
+  <div class="version-bar">v1.4 · 2026-08-14 · 第 5 步／共 10 步</div>
 </section>
 </main>
 
