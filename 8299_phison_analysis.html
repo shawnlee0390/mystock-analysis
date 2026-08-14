@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>群聯電子(8299) 股票完整分析報告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 長期基本面色系 (第1-6步) */
+  --plum:#5B3A7A;
+  --plum-dark:#3C2652;
+  --plum-tint:#F3EDF8;
+  --plum-line:#D9C9E8;
+  /* 短線操作色系 (第7-10步，預留) */
+  --amber:#B5651D;
+  --amber-tint:#FBF0E4;
+  /* 通用 */
+  --cream:#FAF7F1;
+  --ink:#241C2C;
+  --ink-soft:#5A4E66;
+  --peak:#E8C77E;
+  --trough:#E7A7B8;
+  --negv:#B23A2E;
+  --posv:#2F7A55;
+  --card:#FFFFFF;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Noto Sans TC', sans-serif;
+  line-height:1.7;
+}
+h1,h2,h3{font-family:'Noto Serif TC', serif;}
+.mono{font-family:'JetBrains Mono', monospace;}
+
+/* ---- Header ---- */
+.hero{
+  background:linear-gradient(135deg, var(--plum-dark), var(--plum) 70%);
+  color:#fff;
+  padding:48px 32px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"8299";
+  position:absolute;
+  right:-10px; top:-30px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:180px;
+  font-weight:700;
+  color:rgba(255,255,255,0.06);
+  letter-spacing:-4px;
+}
+.hero-eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:13px;
+  letter-spacing:0.12em;
+  opacity:0.75;
+  margin-bottom:10px;
+}
+.hero h1{
+  font-size:34px;
+  margin:0 0 8px;
+  font-weight:900;
+}
+.hero p{
+  max-width:640px;
+  opacity:0.88;
+  font-size:15px;
+  margin:0;
+}
+.hero-meta{
+  display:flex; gap:24px; margin-top:20px; flex-wrap:wrap;
+  font-family:'JetBrains Mono', monospace; font-size:12.5px; opacity:0.8;
+}
+
+/* ---- Nav ---- */
+.stepnav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(250,247,241,0.96);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--plum-line);
+  display:flex;
+  overflow-x:auto;
+  padding:0 12px;
+}
+.stepnav a{
+  flex:0 0 auto;
+  padding:14px 14px;
+  font-size:12.5px;
+  color:var(--ink-soft);
+  text-decoration:none;
+  border-bottom:3px solid transparent;
+  white-space:nowrap;
+  font-weight:500;
+  transition:all .15s ease;
+}
+.stepnav a .num{font-family:'JetBrains Mono', monospace; margin-right:4px; opacity:0.6;}
+.stepnav a.active{color:var(--plum-dark); border-bottom-color:var(--plum); font-weight:700;}
+.stepnav a.locked{color:#B7AFC2; cursor:not-allowed; pointer-events:none;}
+
+/* ---- Layout ---- */
+main{max-width:920px; margin:0 auto; padding:40px 24px 100px;}
+section{margin-bottom:56px; scroll-margin-top:64px;}
+.step-tag{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px; letter-spacing:0.08em;
+  color:var(--plum); font-weight:700;
+  margin-bottom:6px;
+}
+section h2{font-size:24px; color:var(--plum-dark); margin:0 0 18px;}
+
+.callout{
+  border-left:4px solid var(--plum);
+  background:var(--plum-tint);
+  padding:16px 20px;
+  border-radius:0 var(--radius) var(--radius) 0;
+  margin-bottom:24px;
+  font-size:15px;
+}
+.callout b{color:var(--plum-dark);}
+.callout.warn{border-left-color:var(--negv); background:#FBECEA;}
+.callout.warn b{color:var(--negv);}
+
+table{
+  width:100%; border-collapse:collapse; margin:18px 0 10px;
+  font-size:13.5px;
+  background:var(--card);
+  border-radius:var(--radius); overflow:hidden;
+  box-shadow:0 1px 3px rgba(60,38,82,0.08);
+}
+th,td{padding:9px 10px; text-align:center; border-bottom:1px solid #EFE8F5;}
+th{background:var(--plum-tint); color:var(--plum-dark); font-weight:700; font-size:12.5px;}
+td:first-child, th:first-child{text-align:left; font-weight:600;}
+.negv{color:var(--negv); font-weight:700;}
+.posv{color:var(--posv); font-weight:600;}
+.hl-row{background:#FCF6E8;}
+
+.card{
+  background:var(--card); border-radius:var(--radius);
+  padding:20px 22px; box-shadow:0 1px 3px rgba(60,38,82,0.08);
+  margin-bottom:18px;
+}
+.card h3{margin:0 0 10px; font-size:16.5px; color:var(--plum-dark); display:flex; align-items:center; gap:8px;}
+.rule-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:24px; height:24px; border-radius:50%;
+  background:var(--plum); color:#fff; font-size:12px; font-family:'JetBrains Mono';
+  flex:0 0 auto;
+}
+.score-pill{
+  margin-left:auto; font-family:'JetBrains Mono', monospace; font-size:13px;
+  padding:2px 10px; border-radius:20px; font-weight:700;
+}
+.score-good{background:#E4F3EA; color:var(--posv);}
+.score-mid{background:#FDF1DC; color:#946A1B;}
+.score-low{background:#FBECEA; color:var(--negv);}
+
+/* bar chart */
+.barchart{display:flex; align-items:flex-end; gap:10px; height:150px; margin:16px 0 8px; padding:0 4px; border-bottom:1px solid #E4DAF0; position:relative;}
+.barchart::before{content:"";position:absolute; left:0; right:0; top:calc(50% + 0px); border-top:1px dashed #C9BBDB;}
+.bar-col{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative;}
+.bar{width:60%; border-radius:4px 4px 0 0; position:relative; min-height:2px;}
+.bar.pos{background:var(--plum); align-self:flex-end;}
+.bar.neg{background:var(--negv); align-self:flex-start;}
+.bar-wrap{display:flex; flex-direction:column; justify-content:center; height:100%; width:100%; align-items:center;}
+.bar-val{font-family:'JetBrains Mono'; font-size:11px; margin-bottom:2px; font-weight:700;}
+.bar-label{font-size:11px; color:var(--ink-soft); margin-top:6px;}
+.bar.peak{background:var(--peak) !important;}
+.bar.trough{background:var(--trough) !important;}
+
+.pairbar{display:flex; gap:6px; align-items:flex-end; justify-content:center; height:60px;}
+.pairbar .seg{width:14px; border-radius:2px 2px 0 0;}
+.legend{display:flex; gap:16px; font-size:11.5px; color:var(--ink-soft); margin-top:6px;}
+.legend span{display:inline-flex; align-items:center; gap:5px;}
+.dot{width:9px;height:9px;border-radius:2px;display:inline-block;}
+
+.summary-box{
+  background:var(--plum-dark); color:#fff; border-radius:var(--radius);
+  padding:26px 28px; margin-top:20px;
+}
+.summary-box h3{color:#fff; margin:0 0 14px; font-size:18px;}
+.score-big{font-family:'JetBrains Mono'; font-size:44px; font-weight:700; color:var(--peak);}
+.score-row{display:flex; align-items:baseline; gap:14px; margin-bottom:14px;}
+.rule-mini{display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:14px;}
+.rule-mini div{background:rgba(255,255,255,0.08); border-radius:6px; padding:8px 4px; text-align:center; font-size:11px;}
+.rule-mini .v{font-family:'JetBrains Mono'; font-weight:700; font-size:14px; display:block; margin-top:2px;}
+
+.footnote{font-size:12px; color:var(--ink-soft); margin-top:8px;}
+.source-note{
+  font-size:12.5px; color:var(--ink-soft); background:#F2EDF8; padding:10px 14px;
+  border-radius:8px; margin-top:22px;
+}
+.version-bar{
+  font-family:'JetBrains Mono'; font-size:11.5px; color:#B7AFC2;
+  text-align:right; margin-top:28px; padding-top:14px; border-top:1px solid var(--plum-line);
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-eyebrow">TW STOCK &middot; 台股個股完整分析</div>
+  <h1>群聯電子 Phison Electronics (8299)</h1>
+  <p>現金流優先、基本面在後 — 十步驟分析框架。本頁自第一步「現金流量表六大規則盲測」開始，逐步累加。</p>
+  <div class="hero-meta">
+    <span>報告版本 v1.0</span>
+    <span>建立時間 2026-08-14</span>
+    <span>目前進度：第 1 步／共 10 步</span>
+  </div>
+</header>
+
+<nav class="stepnav" id="stepnav">
+  <a href="#step1" class="active"><span class="num">01</span>現金流盲測</a>
+  <a href="#" class="locked"><span class="num">02</span>基本資訊</a>
+  <a href="#" class="locked"><span class="num">03</span>法說會</a>
+  <a href="#" class="locked"><span class="num">04</span>營收趨勢</a>
+  <a href="#" class="locked"><span class="num">05</span>前瞻本益比</a>
+  <a href="#" class="locked"><span class="num">06</span>長期決策</a>
+  <a href="#" class="locked"><span class="num">07</span>技術面</a>
+  <a href="#" class="locked"><span class="num">08</span>籌碼面</a>
+  <a href="#" class="locked"><span class="num">09</span>消息面</a>
+  <a href="#" class="locked"><span class="num">10</span>短線推理</a>
+</nav>
+
+<main>
+<section id="step1">
+  <div class="step-tag">【第 1 步／共 10 步：現金流量表六大規則分析（盲測階段）】</div>
+  <h2>現金流量表六大規則分析</h2>
+
+  <div class="callout warn">
+    <b>關卡判斷：總分約 41.7%，低於 60% 門檻，且 2023 年度出現「營業活動現金流為負＋融資活動現金流為正」的最高警戒訊號組合。</b><br>
+    依框架建議：這檔現金流體質偏弱／有風險訊號，建議先不繼續深入基本面，除非你仍想往下看。本分析階段完全未查詢股價、EPS、產業地位或新聞，純粹依現金流量表數字盲測判讀。
+  </div>
+
+  <h3 style="font-family:'Noto Serif TC'; color:var(--plum-dark); font-size:17px;">原始現金流量數據（單位：億元）</h3>
+  <table>
+    <thead>
+      <tr><th>年度</th><th>A 營業活動</th><th>B 投資活動</th><th>C 融資活動</th><th>D 稅前淨利</th><th>E 期末現金餘額</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2021</td><td class="posv">51.0</td><td class="posv">12.0</td><td class="negv">-21.2</td><td>97.4</td><td>190</td></tr>
+      <tr><td>2022</td><td class="posv">35.9</td><td class="negv">-15.2</td><td class="negv">-50.8</td><td>63.0</td><td>170</td></tr>
+      <tr class="hl-row"><td>2023 ⚠</td><td class="negv">-17.0</td><td class="negv">-13.6</td><td class="posv">+2.58</td><td>41.0</td><td>142</td></tr>
+      <tr><td>2024</td><td class="posv">20.9</td><td class="posv">39.0</td><td class="negv">-6.73</td><td>97.5</td><td>200</td></tr>
+      <tr><td>2025</td><td class="posv">16.0</td><td class="negv">-19.1</td><td class="negv">-31.1</td><td>102.0</td><td>163</td></tr>
+      <tr style="opacity:0.65;"><td>26Q1（單季）</td><td class="negv">-138</td><td class="negv">-8.89</td><td class="posv">+192</td><td>179</td><td>209</td></tr>
+    </tbody>
+  </table>
+  <p class="footnote">2023 年列標示 ⚠ 為規則四警戒年度；26Q1 為單季數字，僅供參考，不列入年度計分。資料來源：使用者提供之現金流量表截圖。</p>
+
+  <!-- Rule 1 -->
+  <div class="card">
+    <h3><span class="rule-num">1</span>A 逐年成長趨勢<span class="score-pill score-low">35%</span></h3>
+    <div class="barchart">
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">51.0</div><div class="bar pos peak" style="height:37%"></div></div><div class="bar-label">2021</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">35.9</div><div class="bar pos" style="height:26%"></div></div><div class="bar-label">2022</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val negv" style="align-self:flex-start;">-17.0</div><div class="bar neg trough" style="height:12%"></div></div><div class="bar-label">2023</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">20.9</div><div class="bar pos" style="height:15%"></div></div><div class="bar-label">2024</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">16.0</div><div class="bar pos" style="height:12%"></div></div><div class="bar-label">2025</div></div>
+    </div>
+    <p>營業活動現金流從 2021 年 <b>51.0 億</b>一路下滑至 2023 年轉負（<b class="negv">-17.0 億</b>），是近五年唯一虧轉年；2024 年回升至 20.9 億，但 2025 年又降回 16.0 億，未能延續回升力道。整體呈現「高點下滑、中間探底、弱勢反彈」的個性，像是「體質變差後勉強止穩」型，沒有中長期方向明確的成長趨勢，判斷為<b>需觀察</b>。</p>
+  </div>
+
+  <!-- Rule 2 -->
+  <div class="card">
+    <h3><span class="rule-num">2</span>B 投資紀律評估<span class="score-pill score-mid">55%</span></h3>
+    <div class="barchart">
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">12.0</div><div class="bar pos" style="height:31%"></div></div><div class="bar-label">2021</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val negv" style="align-self:flex-start;">-15.2</div><div class="bar neg" style="height:39%"></div></div><div class="bar-label">2022</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val negv" style="align-self:flex-start;">-13.6</div><div class="bar neg" style="height:35%"></div></div><div class="bar-label">2023</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">39.0</div><div class="bar pos peak" style="height:100%"></div></div><div class="bar-label">2024</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val negv" style="align-self:flex-start;">-19.1</div><div class="bar neg trough" style="height:49%"></div></div><div class="bar-label">2025</div></div>
+    </div>
+    <p>B 並非每年持續大幅負值，而是正負交替：2021（+12.0）、2024（+39.0）為淨流入，2022、2023、2025 為淨流出。這不是典型「持續重度投資」型的個性，比較像「投資步調不規律」型——沒有穩定的資本支出紀律可循。因為本步驟屬盲測階段，不查詢投資活動細項與產業背景，暫時無法判斷 2024 年正值是處分資產、還是業外投資回收，僅能標記為<b>觀察項目</b>，中性評分。</p>
+  </div>
+
+  <!-- Rule 3 -->
+  <div class="card">
+    <h3><span class="rule-num">3</span>B 投資效益分析（跨年度對照）<span class="score-pill score-mid">50%</span></h3>
+    <table>
+      <thead><tr><th>投資年度</th><th>當年 B</th><th>隔年</th><th>隔年 A</th><th>效益判讀</th></tr></thead>
+      <tbody>
+        <tr><td>2022</td><td class="negv">-15.2</td><td>2023</td><td class="negv">-17.0</td><td class="negv">未見轉強，反而轉負</td></tr>
+        <tr><td>2023</td><td class="negv">-13.6</td><td>2024</td><td class="posv">20.9</td><td class="posv">明顯回升</td></tr>
+        <tr><td>2025</td><td class="negv">-19.1</td><td>26Q1</td><td class="negv">-138（單季）</td><td>單季數字，尚待後續季度驗證</td></tr>
+      </tbody>
+    </table>
+    <p>2022 年投資（B=-15.2）後，隔年 A 不僅沒有轉強反而轉負，投資效益未如預期發酵；2023 年投資（B=-13.6）後，2024 年 A 明顯回升至 20.9，效益轉佳。兩次結果一好一壞，尚未形成穩定可預期的「投資→隔年造血能力提升」模式，屬<b>效益不穩定</b>型。</p>
+  </div>
+
+  <!-- Rule 4 -->
+  <div class="card">
+    <h3><span class="rule-num">4</span>C 融資活動合理性<span class="score-pill score-low">45%</span></h3>
+    <div class="barchart" style="height:120px;">
+      <div class="bar-col"><div class="pairbar"><div class="seg" style="height:0;background:var(--plum);"></div></div>
+        <div class="legend" style="justify-content:center;"><span class="mono" style="font-size:11px;">2021</span></div></div>
+    </div>
+    <table>
+      <thead><tr><th>年度</th><th>A</th><th>B</th><th>C</th><th>是否符合「A負+B負+C正/小幅負」警戒</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td class="posv">51.0</td><td class="posv">12.0</td><td class="negv">-21.2</td><td>否</td></tr>
+        <tr><td>2022</td><td class="posv">35.9</td><td class="negv">-15.2</td><td class="negv">-50.8</td><td>否</td></tr>
+        <tr class="hl-row"><td><b>2023</b></td><td class="negv">-17.0</td><td class="negv">-13.6</td><td class="posv">+2.58</td><td class="negv"><b>是 ⚠</b></td></tr>
+        <tr><td>2024</td><td class="posv">20.9</td><td class="posv">39.0</td><td class="negv">-6.73</td><td>否</td></tr>
+        <tr><td>2025</td><td class="posv">16.0</td><td class="negv">-19.1</td><td class="negv">-31.1</td><td>否</td></tr>
+      </tbody>
+    </table>
+    <p>2023 年同時出現 <b>A 為負值（-17.0）</b>與 <b>C 為正值（+2.58）</b>，符合框架定義中最嚴重的警戒訊號：本業現金流已經是負的，同時融資活動並未明顯淨還債，代表當年可能仍倚賴外部資金支應（因盲測階段未取得融資活動細項，無法判斷是舉債或現金增資）。此訊號目前僅出現 1 次（2023），並非連續多年重複，尚不到「長期依賴外部資金」的程度，但仍是本次六大規則中最值得留意的一項，故評分偏低。</p>
+    <p class="footnote">26Q1（單季）C=+192、A=-138 同樣符合警戒方向，但因是單季數字、不列入年度計分，僅建議後續步驟持續追蹤是否延續為全年趨勢。</p>
+  </div>
+
+  <!-- Rule 5 -->
+  <div class="card">
+    <h3><span class="rule-num">5</span>A &gt; D 現金流品質<span class="score-pill score-low">0%</span></h3>
+    <table>
+      <thead><tr><th>年度</th><th>A</th><th>D（稅前淨利）</th><th>A &gt; D？</th></tr></thead>
+      <tbody>
+        <tr><td>2021</td><td>51.0</td><td>97.4</td><td class="negv">否</td></tr>
+        <tr><td>2022</td><td>35.9</td><td>63.0</td><td class="negv">否</td></tr>
+        <tr><td>2023</td><td class="negv">-17.0</td><td>41.0</td><td class="negv">否</td></tr>
+        <tr><td>2024</td><td>20.9</td><td>97.5</td><td class="negv">否</td></tr>
+        <tr><td>2025</td><td>16.0</td><td>102.0</td><td class="negv">否</td></tr>
+      </tbody>
+    </table>
+    <p>採嚴格二分法逐年檢驗，<b>近五年全數不通過（0/5 = 0%）</b>：每一年稅前淨利都明顯高於營業活動現金流，且差距通常達 2-6 倍（如 2025 年 D=102.0 對 A=16.0）。這是六項規則中最鮮明的警訊，屬於典型「膨風灌水」型個性——帳上年年賺錢，但轉換成實際營業現金流入的比例持續偏低，需要留意獲利品質與應收帳款、存貨等營運資金變化（盲測階段暫無法取得細項，建議後續步驟深入法說會資料查證）。</p>
+  </div>
+
+  <!-- Rule 6 -->
+  <div class="card">
+    <h3><span class="rule-num">6</span>E 期末現金餘額穩定性<span class="score-pill score-mid">65%</span></h3>
+    <div class="barchart">
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">190</div><div class="bar pos" style="height:83%"></div></div><div class="bar-label">2021</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">170</div><div class="bar pos" style="height:75%"></div></div><div class="bar-label">2022</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">142</div><div class="bar pos trough" style="height:62%"></div></div><div class="bar-label">2023</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">200</div><div class="bar pos peak" style="height:88%"></div></div><div class="bar-label">2024</div></div>
+      <div class="bar-col"><div class="bar-wrap"><div class="bar-val">163</div><div class="bar pos" style="height:71%"></div></div><div class="bar-label">2025</div></div>
+    </div>
+    <p>期末現金餘額在 <b>142～209 億</b>區間波動，2023 年降至五年低點 142 億，隨後 2024 年回升至高點 200 億，2025 年微降至 163 億，26Q1 單季又回到 209 億。雖然沒有維持在單一穩定水位，波動幅度也超過「合理 &lt;10%」的季度標準，但拉長來看並未出現長期趨勢性下滑，屬於「有波動但守得住」型，評分中性偏正。</p>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-box">
+    <h3>總評分與關卡建議</h3>
+    <div class="score-row">
+      <span class="score-big">41.7%</span>
+      <span>／ 100%　⟶　等級：<b>需觀察（&lt;60%）</b></span>
+    </div>
+    <div class="rule-mini">
+      <div>規則一<span class="v">35%</span></div>
+      <div>規則二<span class="v">55%</span></div>
+      <div>規則三<span class="v">50%</span></div>
+      <div>規則四<span class="v">45%</span></div>
+      <div>規則五<span class="v">0%</span></div>
+      <div>規則六<span class="v">65%</span></div>
+    </div>
+    <p style="margin-top:16px; opacity:0.92; font-size:14px;">
+      六大規則平均分數約 <b>41.7%</b>，低於 60% 門檻，且 2023 年度同時出現「A 為負＋B 大幅負值＋C 正值」的最高警戒組合，加上規則五（A&gt;D 現金流品質）近五年 <b>全數不通過</b>，是本次盲測中最需要留意的兩個訊號。
+    </p>
+    <p style="opacity:0.92; font-size:14px;">
+      依框架建議：<b>這檔現金流體質偏弱／有風險訊號，建議先不繼續深入基本面，除非你仍想往下看</b>。若你想繼續，下一步（第二步）會查詢股價、EPS、殖利率、營收等基本資訊，並附上查證來源連結；若想先確認資料來源是否正確，也可以指示我逐項覆核。
+    </p>
+  </div>
+
+  <div class="source-note">
+    <b>資料來源備註：</b>本步驟現金流量表數據為使用者提供之截圖，非本次網路搜尋所得。分析全程未查詢群聯 8299 之股價、EPS、產業地位或新聞背景，維持盲測原則。
+  </div>
+
+  <div class="version-bar">v1.0 · 2026-08-14 · 第 1 步／共 10 步</div>
+</section>
+</main>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.stepnav a:not(.locked)'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+
+  links.forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = document.querySelector(a.getAttribute('href'));
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  if('IntersectionObserver' in window && sections.length){
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          links.forEach(function(a){ a.classList.remove('active'); });
+          var id = '#' + entry.target.id;
+          var match = links.find(function(a){ return a.getAttribute('href') === id; });
+          if(match){ match.classList.add('active'); }
+        }
+      });
+    }, {rootMargin:'-40% 0px -55% 0px', threshold:0});
+    sections.forEach(function(s){ observer.observe(s); });
+  }
+})();
+</script>
+
+</body>
+</html>
